@@ -1,0 +1,573 @@
+Вот полностью исправленный, валидный и рабочий код вашей посадочной страницы.
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Sea Technologies | VisionGuard & Astra Platform</title>
+    <style>
+        :root {
+            --bg-color: #050b14;
+            --surface-color: #0b1524;
+            --surface-accent: #11223b;
+            --primary-cyan: #00f0ff;
+            --text-main: #ffffff;
+            --text-muted: #8fa0b5;
+            --border-color: #162e4e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: rgba(11, 21, 36, 0.85);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--primary-cyan);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 25px;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: var(--primary-cyan);
+        }
+
+        section {
+            scroll-margin-top: 90px;
+        }
+
+        .hero {
+            padding: 160px 20px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--primary-cyan);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-btn {
+            background: transparent;
+            border: 2px solid var(--primary-cyan);
+            color: var(--primary-cyan);
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-btn:hover {
+            background: var(--primary-cyan);
+            color: var(--bg-color);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 60px 0 30px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-cyan);
+            margin: 15px auto 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .store-intro {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 4px;
+            margin-bottom: 60px;
+        }
+
+        .store-intro h3 {
+            color: var(--primary-cyan);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .industry-block {
+            margin-bottom: 50px;
+        }
+
+        .industry-name {
+            font-size: 1.8rem;
+            color: var(--primary-cyan);
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-cyan);
+            padding-left: 15px;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .module-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 4px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+        }
+
+        .module-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .module-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .astra-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .astra-feature-item {
+            background: var(--surface-accent);
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .astra-feature-item::before {
+            content: '✔';
+            color: var(--primary-cyan);
+            font-weight: bold;
+        }
+
+        .overlay-demo {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), var(--surface-color);
+            border-left: 4px solid var(--primary-cyan);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            color: var(--primary-cyan);
+        }
+
+        footer {
+            background: #02050a;
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 100px;
+            color: var(--text-muted);
+        }
+
+        footer p {
+            margin-bottom: 15px;
+        }
+
+        footer a {
+            color: var(--primary-cyan);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">BLACK SEA <span>TECHNOLOGIES</span></div>
+            <nav>
+                <a href="#visionguard">VisionGuard AI</a>
+                <a href="#visionstore">VisionStore</a>
+                <a href="#astra">Astra Platform</a>
+                <a href="#contact">კონტაქტი</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>მართვისა და ვიდეოანალიტიკის სისტემები <span>VisionGuard</span></h1>
+        <p>ჩვენი ინტელექტუალური აღჭურვილობა და მოქნილი ანალიტიკური მოდულები ერთიანდება, რათა თქვენი ვიდეომეთვალყურეობის სისტემიდან რევოლუციური ბიზნეს-ანალიტიკა მიიღოთ.</p>
+        <button class="cta-btn" onclick="location.href='mailto:info@blackseatechnologies.com'">დემოს მოთხოვნა</button>
+    </section>
+
+    <div class="container">
+
+        <section id="visionstore" class="store-intro">
+            <h3>აღმოაჩინეთ VisionStore</h3>
+            <p>ეს არის თქვენი მიზნობრივი სივრცე AI ვიდეოანალიტიკის მოდულებისთვის, რომლებიც მარტივად ზრდიან დეტექციის სიზუსტეს, უზრუნველყოფენ მოთხოვნებთან შესაბამისობას და აძლიერებენ ანალიტიკას. ჩვენი მარკეტპლეისი გთავაზობთ AI მოდულებისა და გაფართოებების მუდმივად მზარდ კატალოგს, რომლებიც თავსებადია მოწინავე Vision Bionic ვიდეოჩამწერებთან (NVR). შეახამეთ მოდულები თქვენი სპეციფიკური ოპერაციული ამოცანების მიხედვით: პროცესების ოპტიმიზაცია, საფრთხეების შეკავება, უსაფრთხოების ამაღლება ან კლიენტების ქცევის გაგება. სააბონენტო საფასო მოდელი საშუალებას გაძლევთ დაიწყოთ მცირედით და მოქნილად გაფართოვდეთ ზრდასთან ერთად. სპეციალიზებული ხელოვნური ინტელექტის დანერგვა არასოდეს ყოფილა ასეთი მარტივი — VisionStore ამცირებს სირთულეს, ხარჯებსა და რისკებს, რაც საშუალებას გაძლევთ შექმნათ უნიკალური გადაწყვეტა.</p>
+        </section>
+
+        <section id="visionguard">
+            <h2 class="section-title">VisionGuard-ის AI მოდულების კატალოგი</h2>
+
+            <div class="industry-block">
+                <div class="industry-name">რესტორნები და კაფეები</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Table Tracker</h4>
+                        <p>იყენებს ხელოვნურ ინტელექტსა და კომპიუტერულ ხედვას მაგიდების დაკავებულობისა და ბრუნვის რეალურ დროში მონიტორინგისთვის. აფიქსირებს სტუმრების მოსვლასა და ადგილების გათავისუფლებას, აანალიზებს მომსახურების საშუალო დროს დასმისა და პერსონალის ოპტიმიზაციისთვის.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Diner Demographics</h4>
+                        <p>აანალიზებს სტუმრების სახეებს ზუსტი დემოგრაფიული მონაცემების შესაგროვებლად (ასაკი, სქესი, ემოციური განწყობა და სხვა). ეხმარება მარკეტინგს მიზნობრივი კამპანიების გაშვებასა და მენიუს პერსონალიზაციაში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Cleanliness Check</h4>
+                        <p>აკონტროლებს მაგიდების დასუფთავების სიხშირესა და ხარისხს. უზრუნველყოფს სანიტარულ სტანდარტებს კლიენტების ვიზიტებს შორის და მომენტალურად აფრთხილებს პერსონალს დარღვევების შესახებ, რაც ზრდის ბრენდისადმი ლოიალობას.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Plate Checker</h4>
+                        <p>მონაცემთა ბაზასთან შედარების საფუძველზე უზრუნველყოფს თითოეული კერძის შესაბამისობას ეტალონურ გაფორმებასთან და პორციის ზომასთან. ამცირებს პროდუქტების ხარჯს, თავიდან აცილებს შეცდომებს კერძის დარბაზში გატანამდე და ამაღლებს სერვისის სტანდარტებს.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">საგანმანათლებლო დაწესებულებები</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Attendance Tracker</h4>
+                        <p>ცნობს სტუდენტების სახეებს აუდიტორიაში შესვლისას. ავტომატურად აგენერირებს დასწრების ყოველდღიურ რეპორტებს, გამორიცხავს ადამიანურ ფაქტორს და ავლენს გაცდენების პატერნებს დროული რეაგირებისთვის.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Campus Security AI</h4>
+                        <p>ავლენს საფრთხეებსა და სამართალდარღვევებს კამპუსის ტერიტორიაზე: საეჭვო პირებს, სახიფათო საგნებს, ვანდალიზმისა და უკანონო შეღწევის აქტებს. მომენტალურად გზავნის განგაშის სიგნალს უსაფრთხოების სამსახურში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Lecture Engagement</h4>
+                        <p>აფასებს სტუდენტების ჩართულობასა და რეაქციას მეცადინეობის დროს სახეზე ემოციების ამოცნობის საშუალებით. ლექტორებს აძლევს ოპერატიულ უკუკავშირს სწავლების მეთოდების ადაპტაციისთვის.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Test Proctoring</h4>
+                        <p>აკონტროლებს სტუდენტების ქცევას გამოცდებზე გადაწერის, საუბრის, ტელეფონების ან სხვისი ეკრანების გამოყენების გამოსავლენად. უზრუნველყოფს ტესტირების სამართლიანობას ზედმეტი სტრესის გარეშე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Perimeter Watch</h4>
+                        <p>ტერიტორიის პერიმეტრზე განთავსებული კამერები და სენსორები აფიქსირებენ დამრღვევებს, გარეულ ცხოველებს, ღობის დაზიანებასა და საეჭვო ტრანსპორტს დაწესებულების საზღვრების დასაცავად.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Weapon Detection</h4>
+                        <p>ღრმა სწავლების ალგორითმები ცნობენ ჩანთებში, ტანსაცმელში ან კარადებში დამალულ ცეცხლსასროლ და ცივ იარაღს, და მომენტალურად აგზავნიან შეტყობინებებს რისკების მინიმიზაციისთვის.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Disturbance Detector</h4>
+                        <p>აკუსტიკური AI ცნობს აგრესიულ ყვირილს, მსხვრევადი შუშის ხმას, გასროლებსა და აფეთქებებს, და ზუსტად აჩვენებს შემთხვევის ადგილს ობიექტის რუკაზე.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">საბანკო სექტორი</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Demographic Tracker</h4>
+                        <p>ანონიმურად აკონტროლებს ფილიალის ვიზიტორთა პროფილებს (ასაკი, სქესი, ბანკში ყოფნის დრო, ვიზიტების სიხშირე). აგრეგირებული მონაცემები ეხმარება სამუშაო საათების, მარკეტინგისა და ლოკალური ფინანსური პროდუქტების მორგებაში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>ATM Guard</h4>
+                        <p>ბანკომატების ზონების ინტელექტუალური კონტროლი. რეაგირებს ადამიანების ხანგრძლივ უმიზნო ყოფნაზე (ლოიტერინგი), ვანდალიზმზე, სკიმინგ-მოწყობილობების დამონტაჟებასა და პინ-კოდების თვალთვალზე (shoulder surfing).</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Branch Crowd Control</h4>
+                        <p>პროგნოზირებს და ზომავს ფილიალების დატვირთულობის დონეს რეალურ დროში. რიგების დაფიქსირებისას სისტემა ავტომატურად აოპტიმიზებს თანამშრომლების განრიგს და კლიენტებს სთავაზობს დისტანციურ ჩაწერას.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Employee Productivity</h4>
+                        <p>აანალიზებს პერსონალის მიერ კლიენტებთან, თათბირებზე ან უქმად გატარებულ დროს. გენერირებს ინსაითებს სამუშაო პროცესების ოპტიმიზაციისთვის, დატვირთვის ბალანსისა და პრემიების დასათვლელად.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">ავტოსერვისები და პროფილაქტიკები</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Service Scheduler</h4>
+                        <p>აინტეგრირებს მანქანის ნომრების ამოცნობას ჩაწერების ჟურნალთან და ავლენს შეფერხებებს პოსტებზე. აოპტიმიზებს ხელოსნების განრიგს და უგზავნის შეტყობინებებს მენეჯერებს ტაიმინგიდან გადახვევისას.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Technician Efficiency</h4>
+                        <p>ანონიმურად აფასებს ხელოსნების სამუშაო ციკლებს, აღჭურვილობის უმოქმედობის დროს, შიდა რეგლამენტების დაცვასა და ყურადღების გამფანტველ ფაქტორებს (მაგალითად, პირადი ტელეფონების გამოყენებას).</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Wandering Worker</h4>
+                        <p>პერსონალის გადაადგილების გეოსივრცითი ანალიზი. საშუალებას იძლევა გამოავლინოს არაეფექტური მარშრუტები სათადარიგო ნაწილების საწყობსა და საამქროს შორის, რაც ეხმარება სერვისის სივრცის უკეთ დაგეგმარებაში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Tire Change Tracker</h4>
+                        <p>საბურავების მონტაჟის ზონაში არსებული AI კამერები აწარმოებენ შეცვლილი საბურავების ავტომატურ დათვლას კლიენტის ინვოისთან შესადარებლად, რაც გამორიცხავს აღურიცხავ სამუშაოებს.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Carwash Module</h4>
+                        <p>აკონტროლებს ძარას გაწმენდის ხარისხს, ბოქსში ყოფნის დროსა და რესურსების ხარჯვას. იძლევა შეტყობინებებს ნაკლოვანებების დროულად გამოსასწორებლად მანქანის მფლობელისთვის გადაცემამდე.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">მედიცინა და ჯანდაცვა</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Patient Wander Prevention</h4>
+                        <p>დემენციის ან ალცჰაიმერის მქონე პაციენტების დაცვა. სისტემა აძლევს სიგნალს პერსონალს, თუ პაციენტი ცდილობს განყოფილების დატოვებას თანხლების გარეშე, რაც ამცირებს კიბეებზე დაცემის ტრავმატიზმს.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Hygiene Audit</h4>
+                        <p>აკონტროლებს ხელების დაბანის, დეზინფექციისა და ინდივიდუალური დაცვის საშუალებების (PPE) ტარების პროტოკოლების შესრულებას, რაც თავიდან აცილებს შიდაჰოსპიტალური ინფექციების გავრცელებას.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Contactless Monitoring</h4>
+                        <p>პულსის სიხშირის, სუნთქვისა და სტრესის ნიშნების დისტანციური გაზომვა ინტენსიური თერაპიის პალატებში ან ინფექციურ ბოქსებში მყოფ პაციენტებში, საკონტაქტო სენსორების გარეშე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Waiting Room Analytics</h4>
+                        <p>მოსაცდელი დარბაზების დატვირთვის ანალიზი, რიგში ყოფნის დროის გაანგარიშება. ეხმარება პაციენტების ნაკადის სიმჭიდროვის რეგულირებასა და მორიგე სამედიცინო პერსონალის გადანაწილებაში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Violence Predictor</h4>
+                        <p>ჟესტებისა და მეტყველების ანალიზი ვიზიტორებს შორის აგრესიის აფეთქებისა და არაადეკვატური ქცევის პროგნოზირებისთვის, კონფლიქტების ადრეული და უსაფრთხო დეესკალაციის მიზნით.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Contact Tracing</h4>
+                        <p>ინფიცირებული პაციენტის კონტაქტების ჯაჭვის სწრაფი განსაზღვრა შენობის შიგნით, საკარანტინო ღონისძიებების ოპერატიულად გატარებისთვის.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Secured Access</h4>
+                        <p>ბიომეტრიული წვდომის კონტროლი სტერილიზებულ ზონებში, ლაბორატორიებსა და აფთიაქის საწყობებში. ცნობს თანამშრომლებს როლების მიხედვით, აწარმოებს ვიზიტორთა აღრიცხვას და ააქტიურებს ფარულ განგაშს საფრთხეებისას.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">წარმოება და საწყობები</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Inventory Scanner</h4>
+                        <p>თაროების, პალეტებისა და ეტიკეტების 24/7 სკანირება. რეალურ დროში ავლენს არასწორ სორტირებას, ცარიელ ადგილებსა და პროდუქციის ვარგისიანობის ვადების დარღვევას საწყობში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Damage Detector</h4>
+                        <p>პროდუქციის შეფუთვის დეფექტების, ჩაჭყლეტილობის, გაჟონვის ან დაზიანების აღმოჩენა კონვეიერულ ხაზებსა და კომპლექტაციის ზონებში მოძრაობის პროცესში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Safety Inspector</h4>
+                        <p>საამქროების უწყვეტი მონიტორინგი უცხო საგნების, სითხეების დაღვრის, იატაკზე ბზარების, დაბლოკილი სახანძრო გასასვლელების ან ჩაფხუტების არქონის გამოსავლენად.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Forklift Safety System</h4>
+                        <p>სასაწყობო ტექნიკის ადამიანებთან შეჯახების პრევენციის სისტემა. წრიული ხედვის კამერები აკონტროლებენ დამტვირთველის "ბრმა" ზონებს და აძლევენ გამაფრთხილებელ სიგნალს მძღოლს.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">რითეილი / სავაჭრო ქსელები</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Queue Manager</h4>
+                        <p>რიგების მონიტორინგი სალარო ზონებში. გადასცემს სიგნალს დამატებითი სალაროების გახსნის შესახებ მყიდველების ლოდინის კრიტიკული დროის გადაჭარბებისას.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Dwell Time Analyzer</h4>
+                        <p>მყიდველთა ყურადღების თერმული რუკების (Heatmaps) შექმნა ვიტრინებთან და პრომო-სტენდებთან. ეხმარება მერჩენდაიზერებს საქონლის განლაგების კორექტირებაში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Planogram Analyzer</h4>
+                        <p>თაროებზე საქონლის განლაგების შესაბამისობის ავტომატური შემოწმება ეტალონურ პლანოგრამასთან და ცარიელი ადგილების (out-of-stock) დაფიქსირება.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Customer Counting</h4>
+                        <p>შემსვლელი და გამსვლელი მყიდველების ნაკადის მაღალი სიზუსტის დათვლა გაყიდვების კონვერსიის შესაფასებლად და პერსონალის სამუშაო გრაფიკის დასაგეგმად.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Demography Analyzer</h4>
+                        <p>მყიდველთა ასაკისა და სქესის ანონიმური განსაზღვრა ლოკალური პრომო-აქციების ადაპტაციისთვის, პერსონალური მონაცემების დარღვევის გარეშე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Repeat Offender Alert</h4>
+                        <p>მაღაზიის ცნობილი ქურდების (შოპლიფტერების) შავი სიიდან მომენტალური ამოცნობა სავაჭრო წერტილის კარებში მათი გამოჩენისთანავე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Shoplifting Detector</h4>
+                        <p>საეჭვო მოძრაობის პატერნების ქცევითი ანალიზი (საქონლის ჯიბეში მალვა, მაგნიტური ბირკების მოჭრა, სალაროების გვერდის ავლით გასვლა).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block">
+                <div class="industry-name">კერძო და კომერციული უძრავი ქონება</div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <h4>Perimeter Watch</h4>
+                        <p>ღობეების, კედლებისა და დაცული ზონების კონტროლი. დეტექტირებას უკეთებს მიწის გათხრას, გადაძრომას, ჭიშკრის გატეხვის მცდელობებსა და ტრანსპორტის უნებართვო ყოფნას.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>After-Hours Activity</h4>
+                        <p>ობიექტების დაცვა ღამის საათებში და უქმე დღეებში. აფიქსირებს მცირედ მოძრაობას ან შუქის ჩართვას დაკეტილ ცარიელ შენობებში.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Visitor Management</h4>
+                        <p>სტუმრების სიების ავტომატური ვერიფიკაცია ავტომობილის ნომრებისა და სახის ბიომეტრიის მიხედვით საკონტროლო-გამშვებ პუნქტებზე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Loitering Detector</h4>
+                        <p>იმ პირების გამოვლენა, რომლებიც დიდხანს იმყოფებიან შესასვლელებთან ან ღობეებთან აშკარა მიზნის გარეშე, რაც შეიძლება მიუთითებდეს უკანონო შეღწევის მომზადებაზე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Weapons Detector</h4>
+                        <p>ცეცხლსასროლი, ცივი იარაღის ან ფეთქებადი ნივთიერებების აღმოჩენა ადამიანების ხელში ღია მოედნებზე ან პარკინგებზე.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Wildfire Watcher</h4>
+                        <p>გარე AI კამერები სკანირებენ ჰორიზონტს კვამლის, ალმოდებული ადგილების, მფრინავი ნაპერწკლების ან სმოგის გამოსავლენად, დიდი ხანძრების პრევენციისთვის.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Vehicle Monitor</h4>
+                        <p>ავტომობილების 24-საათიანი დაცვა ღია პარკინგებზე ვანდალიზმისგან, სარკეების, საბურავების მოპარვისგან ან გატაცების მცდელობისგან.</p>
+                    </div>
+                    <div class="module-card">
+                        <h4>Automated Barrier</h4>
+                        <p>შლაგბაუმებისა და ბოლარდების მართვა სახელმწიფო ნომრების თეთრ სიასთან შედარების საფუძველზე, დისპეტჩერის მონაწილეობის გარეშე.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="astra" style="margin-top: 60px;">
+            <h2 class="section-title">მართვის ღრუბლოვანი პლატფორმა Astra CRM/ERP</h2>
+            <div class="store-intro">
+                <p><strong>Black Sea Technologies Astra</strong> — ეს არის ბიზნეს-პროცესების მართვის ინტეგრირებული ღრუბლოვანი ეკოსისტემა მცირე და საშუალო ბიზნესისთვის. პლატფორმა უზრუნველყოფს ბიზნესის მართვის მაქსიმალურ სიჩქარეს ყოველგვარი შეზღუდვების გარეშე, პროცესების ავტომატიზაციით ერთიან ინტუიციურ სივრცეში.</p>
+                
+                <h4 style="margin-top: 20px; color: var(--primary-cyan);">არქიტექტურის საკვანძო უპირატესობები:</h4>
+                <div class="astra-features-grid">
+                    <div class="astra-feature-item">მართვის ეფექტურობა</div>
+                    <div class="astra-feature-item">უმტკივნეულო ინტეგრაცია email-თან, კალენდრებთან</div>
+                    <div class="astra-feature-item">ინტუიციური ინტერფეისი (ხანგრძლივი სწავლების გარეშე)</div>
+                    <div class="astra-feature-item">პარამეტრების აბსოლუტური მოქნილობა</div>
+                </div>
+
+                <h4 style="margin-top: 30px; color: var(--primary-cyan);">გამოყენების ფუნქციონალური სფეროები:</h4>
+                <p style="margin-bottom: 10px;">• <strong>ლოგისტიკისა და საწყობის მართვა:</strong> საკვანძო ოპერაციული პრობლემების გადაჭრა და მომწოდებელთა ჯაჭვის გამჭოლი ოპტიმიზაცია.</p>
+                <p style="margin-bottom: 10px;">• <strong>ფინანსური მენეჯმენტი და ბილინგი:</strong> საწარმოს ფულადი ნაკადების ეფექტური კონტროლი, ინვოისების გამოწერა.</p>
+                <p style="margin-bottom: 10px;">• <strong>მარკეტინგი და CRM:</strong> საბოლოო კლიენტებთან გრძელვადიანი კონტაქტების დამყარება, განვითარება და შენარჩუნება.</p>
+                <p style="margin-bottom: 15px;">• <strong>ბიზნესის კონტროლი:</strong> რუტინული რეგლამენტებისა და გამჭოლი ბიზნეს-პროცესების სრული ავტომატიზაცია.</p>
+
+                <h4 style="margin-top: 25px; color: var(--primary-cyan);">Astra პლატფორმის ჩაშენებული ინსტრუმენტების სრული სპექტრი:</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin-top: 15px; font-size: 0.9rem; color: var(--text-muted);">
+                    <div>• პერსპექტივები და კლიენტები</div><div>• სერვისული მხარდაჭერა</div><div>• პროექტები და ამოცანები</div>
+                    <div>• ინტეგრირებული CMS</div><div>• კომერციული წინადადებები</div><div>• გაყიდვების შეკვეთები</div>
+                    <div>• კონტრაქტები და ხელშეკრულებები</div><div>• POS ტერმინალები</div><div>• ინვოისები და გადახდები</div>
+                    <div>• ბუღალტრული აღრიცხვა</div><div>• ოპერატიული ჩარევები</div><div>• კალენდარი / დღის წესრიგი</div>
+                    <div>• თანამშრომელთა მართვა</div><div>• ხარჯების რეპორტები</div><div>• აპლიკაციები და პლაგინები</div>
+                    <div>• სასაწყობო მარაგები</div><div>• მიმოხილვები და ანალიტიკა</div><div>• სამუშაო დროის აღრიცხვა</div>
+                    <div>• შესყიდვები და მიწოდება</div><div>• ღია API დეველოპერებისთვის</div><div>• რეკრუტინგი და კადრების შერჩევა</div>
+                    <div>• წევრობა და გამომწერები</div><div>• პროდუქტები და მომსახურება</div><div>• გაგზავნა და ლოგისტიკა</div>
+                    <div>• წარმოების ციკლები</div><div>• კომუნიკაციები და ინტერფეისები</div><div>• მონაცემთა იმპორტი და ექსპორტი</div>
+                    <div>• მასობრივი დაგზავნა (@)</div><div>• საბანკო ქეისები</div>
+                </div>
+
+                <h4 style="margin-top: 30px; color: var(--primary-cyan);">სინერგია AI ვიდეოანალიტიკასთან:</h4>
+                <p>VisionGuard-ის მოდულები მუშაობენ Astra-სთან მჭიდრო კავშირში და გადასცემენ მონაცემებს ვიზიტორთა ქცევის, რიგებისა და სალარო ოპერაციების შესახებ პირდაპირ მართვის პანელებში. მეტამონაცემების ამოცნობის მაგალითი სალარო კვანძზე:</p>
+                <div class="overlay-demo">
+                    [VisionGuard HUD Live OSD Node]<br>
+                    ვიზიტორი: ქალი, ~27 წლის | ბოლო ვიზიტი: 2 დღის წინ | საშუალო ჩეკი: $73<br>
+                    თანხლება: ბავშვი, 5 წლის | სტატისტიკა: ბავშვების თანდასწრება ზრდის საშუალო ჩეკს 24%-ით<br>
+                    კვანძის სტატუსი: სამუშაო დროის ოპტიმიზაცია | რიგების კონტროლი | სალაროზე ფროდისგან დაცვა აქტიურია
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer id="contact">
+        <p>© 2026 Black Sea Technologies. ყველა უფლება დაცულია. შემუშავებულია VisionGuard & Astra Platform ბრენდის ქვეშ.</p>
+        <p>Web: <a href="http://bstech.ge">bstech.ge</a></p>
+    </footer>
+     
+</body>
+</html>
+
+```
