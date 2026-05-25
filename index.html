@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Black Sea Technologies | VisionGuard & Astra Platform</title>
+    <meta name="description" content="მართვისა და ვიდეოანალიტიკის ინტელექტუალური სისტემები VisionGuard AI და ღრუბლოვანი პლატფორმა Astra CRM/ERP.">
+    <meta name="keywords" content="AI ვიდეოანალიტიკა, VisionGuard, Astra CRM, ERP, Black Sea Technologies, ვიდეომეთვალყურეობა">
+    <meta property="og:title" content="Black Sea Technologies | VisionGuard & Astra">
+    <meta property="og:description" content="მართვისა და ვიდეოანალიტიკის ინტელექტუალური სისტემები.">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #020617;
+            --surface-color: rgba(15, 23, 42, 0.45);
+            --surface-accent: rgba(30, 41, 59, 0.7);
+            --primary-cyan: #00f0ff;
+            --accent-blue: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(51, 65, 85, 0.35);
+            --neon-glow: rgba(0, 240, 255, 0.2);
+            --glass-blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Индикатор прогресса скролла */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--accent-blue));
+            width: 0%; z-index: 1001;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        header {
+            background-color: rgba(2, 6, 23, 0.7);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary-cyan);
+            text-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        .logo span {
+            color: var(--primary-cyan);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary-cyan);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+
+        .lang-switcher {
+            display: flex;
+            gap: 5px;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 4px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-cyan);
+            color: #020617;
+        }
+
+        section {
+            scroll-margin-top: 100px;
+        }
+
+        .live-status-widget {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 30px;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .status-pulse {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* Прямой совершенный виджет WhatsApp (Левый угол) */
+        .floating-chat-container {
+            position: fixed;
+            bottom: 25px; left: 25px;
+            z-index: 999;
+        }
+
+        .chat-toggle-btn {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            border: none; color: #ffffff;
+            font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .chat-toggle-btn:hover { transform: scale(1.1); box-shadow: 0 0 25px rgba(37, 211, 102, 0.6); }
+
+        .hero {
+            padding: 200px 20px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            color: var(--primary-cyan);
+            background: linear-gradient(135deg, #fff 30%, var(--primary-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 20px rgba(0, 240, 255, 0.3));
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 850px;
+            margin: 0 auto 45px;
+        }
+
+        /* СОВЕРШЕННЫЕ НЕОНОВЫЕ КНОПКИ */
+        .cta-btn {
+            background: rgba(0, 240, 255, 0.03);
+            border: 2px solid var(--primary-cyan);
+            color: var(--primary-cyan);
+            padding: 14px 35px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.2), inset 0 0 12px rgba(0, 240, 255, 0.1);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
+
+        .cta-btn:hover {
+            background: var(--primary-cyan);
+            color: #020617;
+            box-shadow: 0 0 25px var(--primary-cyan), 0 0 50px rgba(0, 240, 255, 0.4);
+            text-shadow: none;
+            transform: translateY(-3px);
+        }
+
+        /* Кнопка "Activate Now" в стиле Emerald Neon */
+        .activate-btn {
+            background: rgba(16, 185, 129, 0.03);
+            border-color: #10b981;
+            color: #10b981;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.2), inset 0 0 12px rgba(16, 185, 129, 0.1);
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+            width: 100%;
+        }
+
+        .activate-btn:hover {
+            background: #10b981;
+            color: #020617;
+            box-shadow: 0 0 25px #10b981, 0 0 50px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Кнопка "Order On-Site Demonstration" в стиле Cyber Sapphire */
+        .demo-site-btn {
+            background: rgba(59, 130, 246, 0.03);
+            border-color: var(--accent-blue);
+            color: var(--text-main);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3), inset 0 0 12px rgba(59, 130, 246, 0.15);
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+        }
+
+        .demo-site-btn:hover {
+            background: var(--accent-blue);
+            color: #f8fafc;
+            box-shadow: 0 0 25px var(--accent-blue), 0 0 50px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Полоса Траста / Индустрии */
+        .trust-bar {
+            background: rgba(15, 23, 42, 0.2);
+            border-block: 1px solid var(--border-color);
+            padding: 20px 0;
+            margin-bottom: 60px;
+        }
+
+        .trust-flex {
+            display: flex; justify-content: space-around;
+            flex-wrap: wrap; gap: 20px; max-width: 1200px;
+            margin: 0 auto; padding: 0 20px;
+            color: var(--text-muted); font-size: 0.9rem;
+            font-weight: 600; letter-spacing: 1px;
+        }
+
+        .trust-item { display: flex; align-items: center; gap: 10px; }
+        .trust-item i { color: var(--primary-cyan); opacity: 0.7; }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 40px auto 80px;
+            padding: 0 20px;
+        }
+
+        .stat-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-cyan);
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.6rem;
+            margin: 80px 0 40px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title span {
+            color: var(--primary-cyan);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--accent-blue));
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .store-intro {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 45px;
+            border-radius: 8px;
+            margin-bottom: 70px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .store-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-cyan), var(--accent-blue));
+        }
+
+        .store-intro h3 {
+            color: var(--primary-cyan);
+            margin-bottom: 20px;
+            font-size: 1.7rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ИНТЕРАКТИВНЫЕ ЗАГЛУШКИ ДЛЯ ИНТЕРФЕЙСА С ПОДДЕРЖКОЙ LIVE VIDEO */
+        .dashboard-showcase-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 35px; margin: 60px 0;
+            backdrop-filter: var(--glass-blur);
+        }
+        .showcase-tabs {
+            display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .showcase-tab-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            padding: 10px 20px; cursor: pointer; font-size: 1rem; font-weight: 600;
+            transition: all 0.3s; position: relative;
+        }
+        .showcase-tab-btn.active, .showcase-tab-btn:hover {
+            color: var(--primary-cyan); text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+        .showcase-tab-btn.active::after {
+            content: ''; position: absolute; bottom: -16px; left: 0; width: 100%; height: 2px; background: var(--primary-cyan);
+        }
+        
+        .mockup-viewport {
+            width: 100%; height: 480px; background: #040a15;
+            border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;
+            position: relative; background-size: cover; background-position: center;
+        }
+
+        /* Сетка камер 2х2 */
+        .camera-grid-mockup {
+            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+            width: 100%; height: 100%; gap: 2px; background: #000;
+        }
+        .camera-stream {
+            background: #070f1e; position: relative; border: 1px solid rgba(22, 46, 78, 0.4);
+            overflow: hidden;
+        }
+        .camera-stream::before {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,240,255,0.03) 50%, rgba(0,0,0,0.1) 50%); background-size: 100% 4px;
+        }
+        .cam-header {
+            position: absolute; top: 12px; left: 15px; font-family: monospace; font-size: 0.8rem;
+            color: rgba(255,255,255,0.6); display: flex; align-items: center; gap: 8px; z-index: 2;
+        }
+        .cam-rec-dot { width: 6px; height: 6px; background: #ef4444; border-radius: 50%; animation: pulse-red 1s infinite alternate; }
+        @media(max-width: 768px) { .cam-header { font-size: 0.65rem; } }
+        
+        @keyframes pulse-red { from { opacity: 0.2; } to { opacity: 1; } }
+        
+        .ai-target-box {
+            position: absolute; top: 35%; left: 30%; width: 100px; height: 100px;
+            border: 2px dashed var(--primary-cyan); box-shadow: 0 0 10px rgba(0,240,255,0.2);
+            animation: float-box 4s infinite ease-in-out; z-index: 2;
+        }
+        .ai-tag-label {
+            position: absolute; top: -22px; left: -2px; background: var(--primary-cyan);
+            color: #000; font-size: 0.65rem; font-weight: bold; padding: 2px 6px; font-family: monospace;
+        }
+        @keyframes float-box {
+            0%, 100% { transform: translate(0, 0); } 50% { transform: translate(15px, -10px); }
+        }
+
+        /* Графики бизнес-аналитики */
+        .analytics-mockup {
+            width: 100%; height: 100%; padding: 30px; display: flex; flex-direction: column; gap: 20px;
+            background: linear-gradient(to bottom right, #050c1a, #020613);
+        }
+        .mock-chart-row { display: flex; gap: 20px; flex: 1; }
+        .mock-chart-card {
+            flex: 1; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);
+            border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .mock-bar-container { display: flex; align-items: flex-end; gap: 15px; height: 120px; padding-top: 10px; }
+        .mock-bar { width: 100%; background: linear-gradient(to top, var(--accent-blue), var(--primary-cyan)); border-radius: 3px 3px 0 0; animation: scale-up 1.5s ease-out; }
+        @keyframes scale-up { from { height: 0%; } }
+        .mock-line-node { font-family: monospace; color: var(--primary-cyan); font-size: 1.8rem; font-weight: bold; }
+
+        /* Дашборд Astra ERP */
+        .erp-mockup {
+            width: 100%; height: 100%; padding: 25px; background: #070e1c; font-family: sans-serif;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .erp-top-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        @media(max-width: 600px) { .erp-top-stats { grid-template-columns: repeat(2, 1fr); } }
+        .erp-stat-node { background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; }
+        .erp-table-mock {
+            flex: 1; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 4px; padding: 15px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .erp-row-mock { display: flex; justify-content: space-between; padding: 10px; background: rgba(2, 6, 23, 0.4); border-radius: 4px; font-size: 0.8rem; color: var(--text-muted); }
+        .erp-status-badge { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+
+        .catalog-filter-control {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 15px 15px 15px 55px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-tag {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--primary-cyan);
+            border-color: var(--primary-cyan);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin: 40px 0 80px;
+        }
+
+        .step-card {
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--primary-cyan);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .step-num {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: rgba(0, 240, 255, 0.08);
+            line-height: 1;
+        }
+
+        .step-card i {
+            font-size: 1.8rem;
+            color: var(--primary-cyan);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .step-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .industry-block {
+            margin-bottom: 65px;
+            transition: all 0.5s ease;
+        }
+
+        .industry-name {
+            font-size: 1.9rem;
+            color: #ffffff;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-cyan);
+            padding-left: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .industry-name i {
+            color: var(--primary-cyan);
+            font-size: 1.6rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .module-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 30px;
+            border-radius: 6px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+            background: rgba(15, 23, 42, 0.75);
+            box-shadow: 0 10px 25px var(--neon-glow);
+        }
+
+        .module-image-wrapper {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 240, 255, 0.07);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--primary-cyan);
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover .module-image-wrapper {
+            background: var(--primary-cyan);
+            color: #020617;
+            box-shadow: 0 0 15px var(--primary-cyan);
+        }
+
+        .module-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .module-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* КАЛЬКУЛЯТОР 1 КЛЮЧ = 1 КАМЕРА */
+        .calculator-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 40px; border-radius: 8px;
+            margin: 60px 0; backdrop-filter: var(--glass-blur);
+            position: relative;
+        }
+
+        .calc-grid {
+            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;
+        }
+
+        @media(max-width: 768px) { .calc-grid { grid-template-columns: 1fr; } }
+
+        .range-slider-wrapper { margin: 20px 0 30px; }
+        .range-slider {
+            width: 100%; -webkit-appearance: none;
+            background: rgba(30, 41, 59, 1); height: 8px; border-radius: 4px;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 22px; height: 22px;
+            background: var(--primary-cyan); border-radius: 50%; cursor: pointer;
+            box-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        .plan-select { display: flex; gap: 15px; margin-top: 15px; }
+        .plan-option {
+            flex: 1; background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color); padding: 15px;
+            border-radius: 6px; text-align: center; cursor: pointer;
+            transition: all 0.3s; position: relative;
+        }
+        .plan-option.active {
+            border-color: var(--primary-cyan); background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* Интерактивные подсказки (Tooltips) */
+        .info-icon {
+            position: absolute; top: 10px; right: 10px;
+            color: var(--text-muted); font-size: 0.85rem; cursor: pointer;
+        }
+        .info-icon:hover { color: var(--primary-cyan); }
+        
+        .tooltip-text {
+            position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%);
+            width: 250px; background: #0f172a; border: 1px solid var(--border-color);
+            padding: 15px; border-radius: 6px; color: var(--text-muted);
+            font-size: 0.8rem; text-align: left; opacity: 0; pointer-events: none;
+            transition: all 0.3s; z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .plan-option:hover .tooltip-text { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+
+        /* Правило Мультипликатора Модулей */
+        .multiplier-box {
+            background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border-color);
+            padding: 20px; border-radius: 6px; margin-top: 25px;
+        }
+        .multiplier-selector {
+            display: flex; gap: 10px; margin-top: 12px;
+        }
+        .mult-btn {
+            background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color);
+            color: #fff; padding: 6px 15px; border-radius: 4px; cursor: pointer; transition: all 0.3s;
+        }
+        .mult-btn.active {
+            background: var(--primary-cyan); color: #020617; border-color: var(--primary-cyan);
+            font-weight: bold; box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .price-display-wrapper {
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; border-left: 1px solid var(--border-color); padding-left: 40px;
+        }
+        @media(max-width: 768px) { .price-display-wrapper { border-left: none; padding-left: 0; padding-top: 30px; border-top: 1px solid var(--border-color); } }
+
+        .final-price {
+            font-size: 4rem; font-weight: 800; color: var(--primary-cyan);
+            line-height: 1; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        /* ПЛАТНАЯ ЖИВАЯ ДЕМОНСТРАЦИЯ НА ОБЪЕКТЕ */
+        .demo-showcase-box {
+            background: linear-gradient(135deg, rgba(11, 21, 36, 0.8), rgba(2, 6, 23, 0.9));
+            border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px;
+            padding: 40px; margin: 60px 0; backdrop-filter: var(--glass-blur);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+        }
+        .demo-badge-price {
+            background: rgba(0, 240, 255, 0.1); border: 1px solid var(--primary-cyan);
+            color: var(--primary-cyan); padding: 5px 15px; border-radius: 20px;
+            font-weight: bold; font-size: 0.9rem; display: inline-block; margin-bottom: 15px;
+        }
+
+        /* Блок бизнес-кейса (Case Study) */
+        .case-study-box {
+            background: linear-gradient(135deg, rgba(15,23,42,0.6), rgba(30,41,59,0.3));
+            border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 35px; margin: 60px 0; backdrop-filter: var(--glass-blur);
+        }
+        .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+        @media(max-width: 768px) { .case-grid { grid-template-columns: 1fr; } }
+        .case-metric { background: rgba(2,6,23,0.4); padding: 20px; border-radius: 6px; border-left: 3px solid #10b981; }
+
+        .astra-features-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 30px;
+        }
+        .astra-feature-item {
+            background: var(--surface-accent); border: 1px solid var(--border-color);
+            padding: 18px 20px; font-size: 0.95rem; display: flex; align-items: center; gap: 12px; border-radius: 4px;
+        }
+
+        .astra-grid-tools {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 25px; font-size: 0.95rem; color: var(--text-muted);
+        }
+        .astra-tool-tag {
+            background: rgba(30, 41, 59, 0.3); padding: 11px 15px; border-radius: 4px; border: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 10px; backdrop-filter: var(--glass-blur);
+        }
+        .astra-tool-tag i { color: var(--primary-cyan); width: 16px; text-align: center; }
+
+        .overlay-demo {
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.9), rgba(15, 23, 42, 0.95));
+            border-left: 4px solid var(--primary-cyan); padding: 25px; margin: 25px 0;
+            font-family: 'Courier New', Courier, monospace; color: var(--primary-cyan); border-radius: 0 6px 6px 0;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6); font-size: 0.9rem;
+        }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px); z-index: 2000;
+            display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-window {
+            background: #0f172a; border: 1px solid var(--border-color); padding: 40px; border-radius: 8px;
+            width: 100%; max-width: 500px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: scale(0.9); transition: all 0.4s ease;
+        }
+        .modal-overlay.active .modal-window { transform: scale(1); }
+        .close-modal {
+            position: absolute; top: 20px; right: 20px; background: transparent; border: none;
+            color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted); }
+        .form-control {
+            width: 100%; background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border-color);
+            padding: 12px; color: #fff; border-radius: 4px; outline: none;
+        }
+        .form-control:focus { border-color: var(--primary-cyan); }
+
+        .reveal-element {
+            opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .reveal-element.revealed { opacity: 1; transform: translateY(0); }
+
+        footer {
+            background: #010409; border-top: 1px solid var(--border-color); padding: 50px 20px;
+            text-align: center; margin-top: 120px; color: var(--text-muted);
+        }
+        footer p { margin-bottom: 18px; }
+        footer a { color: var(--primary-cyan); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="floating-chat-container">
+        <a href="https://wa.me/995000000000" target="_blank" style="text-decoration: none;">
+            <button class="chat-toggle-btn">
+                <i class="fa-brands fa-whatsapp"></i>
+            </button>
+        </a>
+    </div>
+
+    <div class="live-status-widget">
+        <div class="status-pulse"></div>
+        <span class="lang-target" data-ge="SYSTEM STATUS: ONLINE" data-en="SYSTEM STATUS: ONLINE">SYSTEM STATUS: ONLINE</span>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo"><i class="fa-solid fa-shield-halved"></i> BLACK SEA <span>TECHNOLOGIES</span></div>
+            <div class="nav-right">
+                <nav>
+                    <a href="#visionguard">VisionGuard AI</a>
+                    <a href="#visionstore">VisionStore</a>
+                    <a href="#astra">Astra Platform</a>
+                </nav>
+                <div class="lang-switcher">
+                    <button class="lang-btn active" onclick="switchLanguage('ge', this)">GE</button>
+                    <button class="lang-btn" onclick="switchLanguage('en', this)">EN</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero reveal-element">
+        <h1 class="lang-target" data-ge="მართვისა და ვიდეოანალიტიკის სისტემები <span>VisionGuard</span>" data-en="Management & Video Analytics <span>VisionGuard Systems</span>">მართვისა და ვიდეოანალიტიკის სისტემები <span>VisionGuard</span></h1>
+        <p class="lang-target" data-ge="ჩვენი ინტელექტუალური აღჭურვილობა და მოქნილი ანალიტიკური მოდულები ერთიანდება, რათა თქვენი ვიდეომეთვალყურეობის სისტემიდან რევოლუციური ბიზნეს-ანალიტიკა მიიღოთ." data-en="Our intelligent equipment and flexible analytics modules combine to deliver revolutionary business analytics directly from your video surveillance ecosystem.">ჩვენი ინტელექტუალური აღჭურვილობა და მოქნილი ანალიტიკური მოდულები ერთიანდება, რათა თქვენი ვიდეომეთვალყურეობის სისტემიდან რევოლუციური ბიზნეს-ანალიტიკა მიიღოთ.</p>
+        <button class="cta-btn lang-target" data-ge="დემოს მოთხოვნა" data-en="Request Demo" onclick="openDemoModal()">დემოს მოთხოვნა</button>
+    </section>
+
+    <div class="trust-bar reveal-element">
+        <div class="trust-flex">
+            <div class="trust-item"><i class="fa-solid fa-building-columns"></i> <span class="lang-target" data-ge="ბანკები" data-en="BANKS">ბანკები</span></div>
+            <div class="trust-item"><i class="fa-solid fa-utensils"></i> <span class="lang-target" data-ge="რესტორნები" data-en="RESTAURANTS">რესტორნები</span></div>
+            <div class="trust-item"><i class="fa-solid fa-cart-shopping"></i> <span class="lang-target" data-ge="რითეილი" data-en="RETAIL NETWORKS">რითეილი</span></div>
+            <div class="trust-item"><i class="fa-solid fa-industry"></i> <span class="lang-target" data-ge="ქარხნები და საწყობები" data-en="LOGISTICS & INDUSTRY">ქარხნები და საწყობები</span></div>
+        </div>
+    </div>
+
+    <div class="stats-container reveal-element">
+        <div class="stat-card">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-desc lang-target" data-ge="დეტექციის სიზუსტე (AI Accuracy)" data-en="AI Detection Accuracy">დეტექციის სიზუსტე (AI Accuracy)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">&lt;0.5 წმ</div>
+            <div class="stat-desc lang-target" data-ge="რეაგირების დრო (Notification Speed)" data-en="Real-time Alert Latency">რეაგირების დრო (Notification Speed)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-desc lang-target" data-ge="ავტომატური მონიტორინგი (Autonomous Control)" data-en="Fully Autonomous Monitoring">ავტომატური მონიტორინგი (Autonomous Control)</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <section id="visionstore" class="store-intro reveal-element">
+            <h3 class="lang-target" data-ge="<i class='fa-solid fa-cubes'></i> აღმოაჩინეთ VisionStore" data-en="<i class='fa-solid fa-cubes'></i> Discover VisionStore"><i class="fa-solid fa-cubes"></i> აღმოაჩინეთ VisionStore</h3>
+            <p class="lang-target" 
+               data-ge="ეს არის თქვენი მიზნობრივი სივრცე AI ვიდეოანალიტიკის მოდულებისთვის, რომლებიც მარტივად ზრდიან დეტექციის სიზუსტეს, უზრუნველყოფენ მოთხოვნებთან შესაბამისობას და აძლიერებენ ანალიტიკას. ჩვენი მარკეტპლეისი გთავაზობთ AI მოდულებისა და გაფართოებების მუდმივად მზარდ კატალოგს, რომლებიც თავსებადია მოწინავე Vision Bionic ვიდეოჩამწერებთან (NVR)." 
+               data-en="This is your targeted marketplace for AI video analytics modules that easily scale detection accuracy, ensure operational compliance, and enhance data reporting. Our marketplace delivers a continuously expanding catalog of modular AI enhancements fully compatible with state-of-the-art Vision Bionic Network Video Recorders (NVR).">
+               ეს არის თქვენი მიზნობრივი სივრცე AI ვიდეოანალიტიკის მოდულებისთვის, რომლებიც მარტივად ზრდიან დეტექციის სიზუსტეს, უზრუნველყოფენ მოთხოვნებთან შესაბამისობას და აძლიერებენ ანალიტიკას. ჩვენი მარკეტპლეისი გთავაზობთ AI მოდულებისა და გაფართოებების მუდმივად მზარდ კატალოგს, რომლებიც თავსებადია მოწინავე Vision Bionic ვიდეოჩამწერებთან (NVR).
+            </p>
+        </section>
+
+        <section class="dashboard-showcase-box reveal-element">
+            <h3 class="lang-target" data-ge="<i class='fa-solid fa-desktop'></i> სისტემის ინტერფეისის მიმოხილვა" data-en="<i class='fa-solid fa-desktop'></i> System Interface Showcase"><i class="fa-solid fa-desktop'></i> სისტემის ინტერფეისის მიმოხილვა</h3>
+            <div class="showcase-tabs">
+                <button class="showcase-tab-btn active" onclick="switchShowcaseTab('live', this)">Live Core Streams</button>
+                <button class="showcase-tab-btn" onclick="switchShowcaseTab('bi', this)">Business Analytics Dashboards</button>
+                <button class="showcase-tab-btn" onclick="switchShowcaseTab('crm', this)">Astra ERP Platform</button>
+            </div>
+            
+            <div class="mockup-viewport" id="showcaseViewport">
+                </div>
+        </section>
+
+        <h2 class="section-title reveal-element"><span class="lang-target" data-ge="როგორ მუშაობს" data-en="How It">როგორ მუშაობს</span> <span class="lang-target" data-ge="სისტემა" data-en="Works">სისტემა</span></h2>
+        <div class="steps-grid reveal-element">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <i class="fa-solid fa-plug"></i>
+                <h4 class="lang-target" data-ge="ინტეგრაცია" data-en="Integration">ინტეგრაცია</h4>
+                <p class="lang-target" data-ge="არსებული კამერების მარტივი მიერთება Vision Bionic NVR ჩამწერებთან." data-en="Seamless connection of existing IP cameras with Vision Bionic NVR.">არსებული კამერების მარტივი მიერთება Vision Bionic NVR ჩამწერებთან.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <i class="fa-solid fa-toggle-on"></i>
+                <h4 class="lang-target" data-ge="აქტივაცია" data-en="Activation">აქტივაცია</h4>
+                <p class="lang-target" data-ge="საჭირო ხელოვნური ინტელექტის მოდულების შერჩევა VisionStore კატალოგიდან." data-en="On-demand activation of neural network modules from VisionStore.">საჭირო ხელოვნური ინტელექტის მოდულების შერჩევა VisionStore კატალოგიდან.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <i class="fa-solid fa-sync"></i>
+                <h4 class="lang-target" data-ge="სინქრონიზაცია" data-en="Synergy">სინქრონიზაცია</h4>
+                <p class="lang-target" data-ge="მეტამონაცემების ავტომატური ასახვა Astra CRM/ERP მართვის პანელში." data-en="Instant data streaming directly to your Astra CRM/ERP ecosystem.">მეტამონაცემების ავტომატური ასახვა Astra CRM/ERP მართვის პანელში.</p>
+            </div>
+        </div>
+
+        <div class="catalog-filter-control reveal-element">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="moduleSearch" class="search-input" placeholder="ძიება / Search module..." onkeyup="filterModules()">
+            </div>
+            <div class="filter-tags">
+                <div class="filter-tag active" data-filter="all" onclick="filterTagClick(this)">Ყველა მოდული (All)</div>
+                <div class="filter-tag" data-filter="safety" onclick="filterTagClick(this)">უსაფრთხოება (Safety)</div>
+                <div class="filter-tag" data-filter="business" onclick="filterTagClick(this)">ბიზნეს-ოპტიმიზაცია (Business)</div>
+                <div class="filter-tag" data-filter="hr" onclick="filterTagClick(this)">პერსონალის კონტროლი (HR)</div>
+            </div>
+        </div>
+
+        <section id="visionguard">
+            <h2 class="section-title reveal-element"><span class="lang-target" data-ge="VisionGuard-ის" data-en="VisionGuard">VisionGuard-ის</span> <span class="lang-target" data-ge="AI მოდულების კატალოგი" data-en="AI Modules Catalog">AI მოდულების კატალოგი</span></h2>
+
+            <div class="industry-block reveal-element" data-type="business">
+                <div class="industry-name">
+                    <i class="fa-solid fa-utensils"></i> 
+                    <span class="lang-target" data-ge="რესტორნები და კაფეები" data-en="Restaurants & Cafes">რესტორნები და კაფეები</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-table-list"></i></div>
+                        <h4 class="lang-target" data-ge="Table Tracker" data-en="Table Tracker">Table Tracker</h4>
+                        <p class="lang-target" data-ge="იყენებს ხელოვნურ ინტელექტსა და კომპიუტერულ ხედვას მაგიდების დაკავებულობისა და ბრუნვის რეალურ დროში მონიტორინგისთვის. აფიქსირებს სტუმრების მოსვლასა და ადგილების გათავისუფლებას." data-en="Uses AI and computer vision to monitor table occupancy and turnover rates in real time. Tracks customer arrivals and seating release to optimize staff allocation.">იყენებს ხელოვნურ ინტელექტსა და კომპიუტერულ ხედვას მაგიდების დაკავებულობისა და ბრუნვის რეალურ დროში მონიტორინგისთვის.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-users-viewfinder"></i></div>
+                        <h4 class="lang-target" data-ge="Diner Demographics" data-en="Diner Demographics">Diner Demographics</h4>
+                        <p class="lang-target" data-ge="აანალიზებს სტუმრების სახეებს ზუსტი დემოგრაფიული მონაცემების შესაგროვებლად (ასაკი, სქესი, ემოციური განწყობა). ეხმარება მარკეტინგს კამპანიების გაშვებაში." data-en="Analyzes diner faces to gather accurate aggregated demographic data (age, gender, emotional state). Empowers marketing teams to launch targeted in-house campaigns.">აანალიზებს სტუმრების სახეებს ზუსტი დემოგრაფიული მონაცემების შესაგროვებლად.</p>
+                    </div>
+                    <div class="module-card" data-tags="business safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-sparkles"></i></div>
+                        <h4 class="lang-target" data-ge="Cleanliness Check" data-en="Cleanliness Check">Cleanliness Check</h4>
+                        <p class="lang-target" data-ge="აკონტროლებს მაგიდების დასუფთავების სიხშირესა და ხარისხს. უზრუნველყოფს სანიტარულ სტანდარტებს კლიენტების ვიზიტებს შორის და მომენტალურად აფრთხილებს პერსონალს." data-en="Monitors the speed and quality of table sanitization. Ensures regulatory sanitary compliance between guest rotations and alerts employees immediately about anomalies.">აკონტროლებს მაგიდების დასუფთავების სიხშირესა და ხარისხს.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-plate-wheat"></i></div>
+                        <h4 class="lang-target" data-ge="Plate Checker" data-en="Plate Checker">Plate Checker</h4>
+                        <p class="lang-target" data-ge="მონაცემთა ბაზასთან შედარების საფუძველზე უზრუნველყოფს თითოეული კერძის შესაბამისობას ეტალონურ გაფორმებასთან და პორციის ზომასთან. ამცირებს პროდუქტების ხარჯს." data-en="Compares served dishes against standard reference images to ensure portions and plating aesthetics match exact culinary guidelines. Minimizes food waste.">მონაცემთა ბაზასთან შედარების საფუძველზე უზრუნველყოფს თითოეული კერძის შესაბამისობას.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="hr safety">
+                <div class="industry-name">
+                    <i class="fa-solid fa-graduation-cap"></i> 
+                    <span class="lang-target" data-ge="საგანმანათლებლო დაწესებულებები" data-en="Educational Institutions">საგანმანათლებლო დაწესებულებები</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="hr">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-clipboard-user"></i></div>
+                        <h4 class="lang-target" data-ge="Attendance Tracker" data-en="Attendance Tracker">Attendance Tracker</h4>
+                        <p class="lang-target" data-ge="გამოსახულების ამოცნობის ალგორითმები ავტომატურად აღრიცხავენ სტუდენტების დასწრებას აუდიტორიებში სახის იდენტიფიკაციის გზით." data-en="Recognizes student faces as they enter lecture halls. Automatically generates daily attendance sheets, eliminating manual verification and human errors.">ცნობს სტუდენტების სახეებს აუდიტორიაში შესვლისას.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-building-shield"></i></div>
+                        <h4 class="lang-target" data-ge="Campus Security AI" data-en="Campus Security AI">Campus Security AI</h4>
+                        <p class="lang-target" data-ge="ავლენს საფრთხეებსა და სამართალდარღვევებს კამპუსის ტერიტორიაზე: საეჭვო პირებს, სახიფათო საგნებს, ვანდალიზმისა და უკანონო შეღწევის აქტებს." data-en="Detects threats and misconduct across school grounds: blacklisted individuals, unauthorized intruders, acts of vandalism, or hazardous items left unattended.">ავლენს საფრთხეებსა და სამართალდარღვევებს კამპუსის ტერიტორიაზე.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-brain"></i></div>
+                        <h4 class="lang-target" data-ge="Lecture Engagement" data-en="Lecture Engagement">Lecture Engagement</h4>
+                        <p class="lang-target" data-ge="აფასებს სტუდენტების ჩართულობასა და რეაქციას მეცადინეობის დროს სახეზე ემოციების ამოცნობის საშუალებით. ლექტორებს აძლევს ოპერატიულ უკუკავშირს." data-en="Evaluates classroom comprehension levels and attention spans via facial emotion expression matrices, providing instructors with constructive feedback.">აფასებს სტუდენტების ჩართულობასა და რეაქციას მეცადინეობის დროს.</p>
+                    </div>
+                    <div class="module-card" data-tags="hr">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-user-secret"></i></div>
+                        <h4 class="lang-target" data-ge="Test Proctoring" data-en="Test Proctoring">Test Proctoring</h4>
+                        <p class="lang-target" data-ge="აკონტროლებს სტუდენტების ქცევას გამოცდებზე გადაწერის, საუბრის, ტელეფონების ან სხვისი ეკრანების გამოყენების გამოსავლენად." data-en="Monitors student behaviors during examinations to trigger alerts for cheating patterns, unauthorized talking, phone use, or screen shifting.">აკონტროლებს სტუდენტების ქცევას გამოცდებზე გადაწერის გამოსავლენად.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-border-top-left"></i></div>
+                        <h4 class="lang-target" data-ge="Perimeter Watch" data-en="Perimeter Watch">Perimeter Watch</h4>
+                        <p class="lang-target" data-ge="ღობეების, კედლებისა და დაცული ზონების კონტროლი. დეტექტირებას უკეთებს მიწის გათხრას, გადაძრომას, ჭიშკრის გატეხვის მცდელობებს." data-en="Monitors fence lines and boundary perimeters to detect breaches, scaling attempts, property damage, or suspicious vehicles parked outside boundaries.">ტერიტორიის პერიმეტრზე განთავსებული კამერები აფიქსირებენ დამრღვევებს.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-gun"></i></div>
+                        <h4 class="lang-target" data-ge="Weapon Detection" data-en="Weapon Detection">Weapon Detection</h4>
+                        <p class="lang-target" data-ge="ღრმა სწავლების ალგორითმები ცნობენ ჩანთებში, ტანსაცმელში ან კარადებში დამალულ ცეცხლსასროლ და ცივ იარაღს, და მომენტალურად აგზავნიან შეტყობინებებს." data-en="Advanced deep learning computer vision instantly recognizes drawn firearms, exposed cold weapons, or structural threats, triggering an emergency lock-down protocol.">ღრმა სწავლების ალგორითმები ცნობენ ცეცხლსასროლ და ცივ იარაღს.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-ear-listen"></i></div>
+                        <h4 class="lang-target" data-ge="Disturbance Detector" data-en="Disturbance Detector">Disturbance Detector</h4>
+                        <p class="lang-target" data-ge="აკუსტიკური AI ცნობს აგრესიულ ყვირილს, მსხვრევადი შუშის ხმას, გასროლებსა და აფეთქებებს, და ზუსტად აჩვენებს შემთხვევის ადგილს ობიექტის რუკაზე." data-en="Acoustic sensor telemetry paired with video feeds detects physical altercations, aggressive screaming, breaking glass, or explosions, mapping the threat location.">აკუსტიკური AI ცნობს აგრესიულ ყვირილს, მსხვრევადი შუშის ხმას.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="business safety">
+                <div class="industry-name">
+                    <i class="fa-solid fa-landmark"></i> 
+                    <span class="lang-target" data-ge="საბანკო სექტორი" data-en="Banking Sector">საბანკო სექტორი</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-chart-pie"></i></div>
+                        <h4 class="lang-target" data-ge="Demographic Tracker" data-en="Demographic Tracker">Demographic Tracker</h4>
+                        <p class="lang-target" data-ge="ანონიმურად აკონტროლებს ფილიალის ვიზიტორთა პროფილებს (ასაკი, სქესი, ბანკში ყოფნის დრო, ვიზიტების სიხშირე). აგრეგირებული მონაცემები ეხმარება მარკეტინგს." data-en="Anonymously tracks visitor profiles (age, gender, dwell duration, visitation intervals) to optimize operating branch hours and local financial product offerings.">ანონიმურად აკონტროლებს ფილიალის ვიზიტორთა პროფილებს.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-vault"></i></div>
+                        <h4 class="lang-target" data-ge="ATM Guard" data-en="ATM Guard">ATM Guard</h4>
+                        <p class="lang-target" data-ge="ბანკომატების ზონების ინტელექტუალური კონტროლი. რეაგირებს ადამიანების ხანგრძლივ უმიზნო ყოფნაზე (ლოიტერინგი), ვანდალიზმზე, სკიმინგ-მოწყობილობების დამონტაჟებაზე." data-en="Intelligent protection for ATM booths. Triggers immediate alarms on loitering patterns, physical tampering, installation of skimming hardware, or shoulder surfing.">ბანკომატების ზონების ინტელექტუალური კონტროლი.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-people-arrows"></i></div>
+                        <h4 class="lang-target" data-ge="Branch Crowd Control" data-en="Branch Crowd Control">Branch Crowd Control</h4>
+                        <p class="lang-target" data-ge="პროგნოზირებს და ზომავს ფილიალების დატვირთულობის დონეს რეალურ დროში. რიგების დაფიქსირებისას სისტემა ავტომატურად აოპტიმიზებს თანამშრომლების განრიგს." data-en="Measures real-time queue bottlenecks. Dynamically suggests staff re-allocation or prompts clients via banking apps to shift to remote services or appointment bookings.">პროგნოზირებს და ზომავს ფილიალების დატვირთულობის დონეს.</p>
+                    </div>
+                    <div class="module-card" data-tags="hr">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-business-time"></i></div>
+                        <h4 class="lang-target" data-ge="Employee Productivity" data-en="Employee Productivity">Employee Productivity</h4>
+                        <p class="lang-target" data-ge="აანალიზებს პერსონალის მიერ კლიენტებთან, თათბირებზე ან უქმად გატარებულ დროს. გენერირებს ინსაითებს სამუშაო პროცესების ოპტიმიზაციისთვის." data-en="Tracks staff time spent with visitors versus down-time. Yields data insights to balance individual employee workloads, streamline standard protocols, and evaluate KPI bonuses.">აანალიზებს პერსონალის მიერ კლიენტებთან გატარებულ დროს.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="business">
+                <div class="industry-name">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> 
+                    <span class="lang-target" data-ge="ავტოსერვისები და პროფილაქტიკები" data-en="Auto Services & Repair Shops">ავტოსერვისები და პროფილაქტიკები</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-calendar-check"></i></div>
+                        <h4 class="lang-target" data-ge="Service Scheduler" data-en="Service Scheduler">Service Scheduler</h4>
+                        <p class="lang-target" data-ge="აინტეგრირებს მანქანის ნომრების ამოცნობას ჩაწერების ჟურნალთან და ავლენს შეფერხებებს პოსტებზე. აოპტიმიზებს ხელოსნების განრიგს." data-en="Integrates license plate recognition with appointment books. Flags bay delays automatically and updates workflow timetables to notify waiting car owners.">აინტეგრირებს მანქანის ნომრების ამოცნობას ჩაწერების ჟურნალთან.</p>
+                    </div>
+                    <div class="module-card" data-tags="hr">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-stopwatch-20"></i></div>
+                        <h4 class="lang-target" data-ge="Technician Efficiency" data-en="Technician Efficiency">Technician Efficiency</h4>
+                        <p class="lang-target" data-ge="ანონიმურად აფასებს ხელოსნების სამუშაო ციკლებს, აღჭურვილობის უმოქმედობის დროს, შიდა რეგლამენტების დაცვასა და ყურადღების გამფანტველ ფაქტორებს." data-en="Anonymously monitors repair bay cycles, machinery usage, safety compliance, and distractions like excessive personal phone usage during active operations.">ანონიმურად აფასებს ხელოსნების სამუშაო ციკლებს.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-route"></i></div>
+                        <h4 class="lang-target" data-ge="Wandering Worker" data-en="Wandering Worker">Wandering Worker</h4>
+                        <p class="lang-target" data-ge="პერსონალის გადაადგილების გეოსივრცითი ანალიზი. საშუალებას იძლევა გამოავლინოს არაეფექტური მარშრუტები სათადარიგო ნაწილების საწყობსა და საამქროს შორის." data-en="Geospatial worker path mapping. Visualizes logistical friction and unnecessary walking between the inventory warehouse and repair bays to enhance physical workshop layouts.">პერსონალის გადაადგილების გეოსივრცითი ანალიზი.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-compact-disc"></i></div>
+                        <h4 class="lang-target" data-ge="Tire Change Tracker" data-en="Tire Change Tracker">Tire Change Tracker</h4>
+                        <p class="lang-target" data-ge="საბურავების მონტაჟის ზონაში არსებული AI კამერები აწარმოებენ შეცვლილი საბურავების ავტომატურ დათვლას კლიენტის ინვოისთან შესადარებლად." data-en="Computer vision tracking over tire bays matches unmounted/mounted wheel sets with active invoicing systems, avoiding unbilled labor leakages.">საბურავების მონტაჟის ზონაში არსებული AI კამერები.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-car-wash"></i></div>
+                        <h4 class="lang-target" data-ge="Carwash Module" data-en="Carwash Module">Carwash Module</h4>
+                        <p class="lang-target" data-ge="აკონტროლებს ძარას გაწმენდის ხარისხს, ბოქსში ყოფნის დროსა და რესურსების ხარჯვას. იძლევა შეტყობინებებს ნაკლოვانებების დროულად გამოსასწорებლად." data-en="Monitors bodywork cleaning coverage, detailing quality, bay occupancy durations, and water resource cycles, highlighting spots missed before customer handover.">აკონტროლებს ძარას გაწმენდის ხარისხს, ბოქსში ყოფნის დროსა.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="safety business">
+                <div class="industry-name">
+                    <i class="fa-solid fa-heart-pulse"></i> 
+                    <span class="lang-target" data-ge="მედიცინა და ჯანდაცვა" data-en="Medicine & Healthcare">მედიცინა და ჯანდაცვა</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-user-injured"></i></div>
+                        <h4 class="lang-target" data-ge="Patient Wander Prevention" data-en="Patient Wander Prevention">Patient Wander Prevention</h4>
+                        <p class="lang-target" data-ge="დემენციის ან ალცჰაიმერის მქონე პაციენტების დაცვა. სისტემა აძლევს სიგნალს პერსონალს, თუ პაციენტი ცდილობს განყოფილების დატოვებას თანხლების გარეშე." data-en="Protects memory care and dementia patients. Signals nurses immediately if a high-risk patient crosses restricted unit exits without medical accompaniment.">დემენციის ან ალცჰაიმერის მქონე პაციენტების დაცვა.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-soap"></i></div>
+                        <h4 class="lang-target" data-ge="Hygiene Audit" data-en="Hygiene Audit">Hygiene Audit</h4>
+                        <p class="lang-target" data-ge="აკონტროლებს ხელების დაბანის, დეზინფექციისა და ინდივიდუალური დაცვის საშუალებების (PPE) ტარების პროტოკოლების შესრულებას, რაც თავიდან აცილებს ინფექციებს." data-en="Tracks sanitizer use, handwashing compliance, and proper Personal Protective Equipment (PPE) utilization across clean zones to prevent hospital infections.">აკონტროლებს ხელების დაბანის, დეზინფექციისა და PPE ტარებას.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-sensor-on"></i></div>
+                        <h4 class="lang-target" data-ge="Contactless Monitoring" data-en="Contactless Monitoring">Contactless Monitoring</h4>
+                        <p class="lang-target" data-ge="პულსის სიხშირის, სუნთქვისა და სტრესის ნიშნების დისტანციური გაზომვა ინტენსიური თერაპიის პალატებში ან ინფექციურ ბოქსებში მყოფ პაციენტებში." data-en="Monitors heart rate indicators, respiration anomalies, and physical stress markers remotely within ICU or high-contagion isolation wards without physical skin leads.">პულსის სიხშირის, სუნთქვისა და სტრესის ნიშნების დისტანციური გაზომვა.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-chair"></i></div>
+                        <h4 class="lang-target" data-ge="Waiting Room Analytics" data-en="Waiting Room Analytics">Waiting Room Analytics</h4>
+                        <p class="lang-target" data-ge="მოსაცდელი დარბაზების დატვირთვის ანალიზი, რიგში ყოფნის დროის გაანგარიშება. ეხმარება პაციენტების ნაკადის სიმჭიდროვის რეგულირებასა და პერსონალის გადანაწილებაში." data-en="Analyzes clinic waiting rooms, calculating dynamic average patient triage times. Optimizes emergency desk rosters during high patient inflow volumes.">მოსაცდელი დარბაზების დატვირთვის ანალიზი, რიგში ყოფნის დრო.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-cloud-bolt"></i></div>
+                        <h4 class="lang-target" data-ge="Violence Predictor" data-en="Violence Predictor">Violence Predictor</h4>
+                        <p class="lang-target" data-ge="ჟესტებისა და მეტყველების ანალიზი ვიზიტორებს შორის აგრესიის აფეთქებისა და არაადეკვატური ქცევის პროგნოზირებისთვის, კონფლიქტების ადრეული დეესკალაციისთვის." data-en="Identifies early physical posturing, high-vibration vocal frequencies, or wild gestures among visitors to predict and safely de-escalate aggressive workplace behaviors.">ჟესტებისა და მეტყველების ანალიზი ვიზიტорებს შორის აგრესიის გამოსავლენად.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-people-arrows"></i></div>
+                        <h4 class="lang-target" data-ge="Contact Tracing" data-en="Contact Tracing">Contact Tracing</h4>
+                        <p class="lang-target" data-ge="ინფიცირებული პაციენტის კონტაქტების ჯაჭვის სწრაფი განსაზღვრა შენობის შიგნით, საკარანტინო ღონისძიებების ოპერატიულად გატარებისთვის." data-en="Traces path histories and exposed contact chains of contagious patients within facilities to run surgical localized disinfection and containment measures.">ინფიცირებული პაციენტის კონტაქტების ჯაჭვის სწრაფი განსაზღვრა.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-fingerprint"></i></div>
+                        <h4 class="lang-target" data-ge="Secured Access" data-en="Secured Access">Secured Access</h4>
+                        <p class="lang-target" data-ge="ბიომეტრიული წვდომის კონტროლი სტერილიზებულ ზონებში, ლაბორატორიებსა და აფთიაქის საწყობებში. ცნობს თანამშრომლებს როლების მიხედვით." data-en="Biometric face structure validation for restricted operating rooms, secure drug vaults, and labs. Logs staff entries and triggers silent security alarms during duress events.">ბიომეტრიული წვდომის კონტროლი სტერილიზებულ ზონებში.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="safety business">
+                <div class="industry-name">
+                    <i class="fa-solid fa-industry"></i> 
+                    <span class="lang-target" data-ge="წარმოება და საწყობები" data-en="Manufacturing & Warehouses">წარმოება და საწყობები</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-barcode"></i></div>
+                        <h4 class="lang-target" data-ge="Inventory Scanner" data-en="Inventory Scanner">Inventory Scanner</h4>
+                        <p class="lang-target" data-ge="თაროების, პალეტებისა და ეტიკეტების 24/7 სკანირება. რეალურ დროში ავლენს არასწორ სორტირებას, ცარიელ ადგილებს საწყობში." data-en="Automated continuous scanning of rack slots, freight pallets, and barcodes. Flags misplaced stock batches or empty shelves directly inside warehouse tracking software.">თაროების, პალეტებისა და ეტიკეტების 24/7 სკანირება.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-box-tissue"></i></div>
+                        <h4 class="lang-target" data-ge="Damage Detector" data-en="Damage Detector">Damage Detector</h4>
+                        <p class="lang-target" data-ge="პროდუქციის შეფუთვის დეფექტების, ჩაჭყლეტილობის, გაჟონვის ან დაზიანების აღმოჩენა კონვეიერულ ხაზებსა და კომპლექტაციის ზონებში." data-en="Identifies shipping box indentations, leaks, protective seal ruptures, or structural product defects along active assembly lines or transit belts.">პროდუქციის შეფუთვის დეფექტების, გაჟონვის ან დაზიანების აღმოჩენა.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-hard-hat"></i></div>
+                        <h4 class="lang-target" data-ge="Safety Inspector" data-en="Safety Inspector">Safety Inspector</h4>
+                        <p class="lang-target" data-ge="საამქროების უწყვეტი მონიტორინგი უცხო საგნების, სითხეების დაღვრის, დაბლოკილი სახანძრო გასასვლელების ან ჩაფხутების არქონის გამოსავლენად." data-en="Monitors workshops for spilled hazards, debris blockages along emergency escape routes, missing high-vis gear, or missing hard-hat safety helmets.">საამქროების უწყვეტი მონიტორინგი უცხო საგნების, ჩაფხუტების არქონის გამოსავლენად.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-truck-pickup"></i></div>
+                        <h4 class="lang-target" data-ge="Forklift Safety System" data-en="Forklift Safety System">Forklift Safety System</h4>
+                        <p class="lang-target" data-ge="სასაწყობო ტექნიკის ადამიანებთან შეჯახების პრევენციის სისტემა. წრიული ხედვის კამერები აკონტროლებენ დამტვირთველის 'ბრმა' ზონებს." data-en="Avoids heavy machinery forklift collisions with floor workers. External 360-degree vision units map driver blindspots and sound warning horns inside the cabin.">სასაწყობო ტექნიკის ადამიანებთან შეჯახების პრევენციის სისტემა.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="business safety">
+                <div class="industry-name">
+                    <i class="fa-solid fa-shop"></i> 
+                    <span class="lang-target" data-ge="რითეილი / სავაჭრო ქსელები" data-en="Retail & Supermarkets">რითეილი / სავაჭრო ქსელები</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-users-rectangle"></i></div>
+                        <h4 class="lang-target" data-ge="Queue Manager" data-en="Queue Manager">Queue Manager</h4>
+                        <p class="lang-target" data-ge="რიგების მონიტორინგი სალარო ზონებში. გადასცემს სიგნალს დამატებითი სალაროების გახსნის შესახებ მყიდველების ლოდინის დროის გადაჭარბებისას." data-en="Tracks check-out line traffic limits. Dispatches automated text alerts to store managers to open new registers if waiting thresholds cross critical boundaries.">რიგების მონიტორინგი სალარო ზონებში.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                        <h4 class="lang-target" data-ge="Dwell Time Analyzer" data-en="Dwell Time Analyzer">Dwell Time Analyzer</h4>
+                        <p class="lang-target" data-ge="მყიდველთა ყურადღების თერმული რუკების (Heatmaps) შექმნა ვიტრინებთან და პრომო-სტენდებთან. ეხმარება მერჩენდაიზერებს საქონლის განლაგებაში." data-en="Plots consumer gaze dwell heatmaps around targeted shelves, promotional endcaps, or shop windows to measure merchandising marketing returns.">მყიდველთა ყურადღების თერმული რუკების (Heatmaps) შექმნა.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-layer-group"></i></div>
+                        <h4 class="lang-target" data-ge="Planogram Analyzer" data-en="Planogram Analyzer">Planogram Analyzer</h4>
+                        <p class="lang-target" data-ge="თაროებზე საქონლის განლაგების შესაბამისობის ავტომატური შემოწმება ეტალონურ პლანოგრამასთან და ცარიელი ადგილების დაფიქსირება." data-en="Scans shelf facing alignments against planned corporate planograms, issuing restock orders instantly to stock clerks when items run out.">თაროებზე საქონლის განლაგების შესაბამისობის ავტომატური შემოწმება.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-calculator"></i></div>
+                        <h4 class="lang-target" data-ge="Customer Counting" data-en="Customer Counting">Customer Counting</h4>
+                        <p class="lang-target" data-ge="შემსვლელი და გამსვლელი მყიდველების ნაკადის მაღალი სიზუსტის დათვლა გაყიდვების კონვერსიის შესაფასებლად და გრაფიკის დასაგეგმად." data-en="High-precision overhead structural gate tracking separating inbound/outbound store foot-traffic to audit precise retail conversion rates.">შემსვლელი და გამსვლელი მყიდველების ნაკადის მაღალი სიზუსტის დათვლა.</p>
+                    </div>
+                    <div class="module-card" data-tags="business">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-venus-mars"></i></div>
+                        <h4 class="lang-target" data-ge="Demography Analyzer" data-en="Demography Analyzer">Demography Analyzer</h4>
+                        <p class="lang-target" data-ge="მყიდველთა ასაკისა და სქესის ანონიმური განსაზღვრა ლოკალური პრომო-აქციების ადაპტაციისთვის, პერსონალური მონაცემების დარღვევის გარეშე." data-en="Anonymously profiles customer demographic curves (age brackets, gender shares) to map product matching metrics without logging private database files.">მყიდველთა ასაკისა და სქესის ანონიმური განსაზღვრა.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-user-slash"></i></div>
+                        <h4 class="lang-target" data-ge="Repeat Offender Alert" data-en="Repeat Offender Alert">Repeat Offender Alert</h4>
+                        <p class="lang-target" data-ge="მაღაზიის ცნობილი ქურდების (შოპლიფტერების) შავი სიიდან მომენტალური ამოცნობა სავაჭრო წერტილის კარებში მათი გამოჩენისთანავე." data-en="Instantly matches faces entering point-of-sale doors against a global shoplifter watch-list, silently routing alerts to loss-prevention units.">მაღაზიის ცნობილი ქურდების შავი სიიდან მომენტალური ამოცნობა.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-eye"></i></div>
+                        <h4 class="lang-target" data-ge="Shoplifting Detector" data-en="Shoplifting Detector">Shoplifting Detector</h4>
+                        <p class="lang-target" data-ge="საეჭვო მოძრაობის პატერნების ქცევითი ანალიზი (საქონლის ჯიბეში მალვა, მაგნიტური ბირკების მოჭრა, სალაროების გვერდის ავლით გასვლა)." data-en="Biomechanical gesture tracking to notice merchandise concealment inside coats, pocket stuffing, tag removal, or avoiding checkout boundaries.">საეჭვო მოძრაობის პატერნების ქცევითი ანალიზი.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industry-block reveal-element" data-type="safety">
+                <div class="industry-name">
+                    <i class="fa-solid fa-building"></i> 
+                    <span class="lang-target" data-ge="კერძო და კომერციული უძრავი ქონება" data-en="Real Estate & Property Management">კერძო და კომერციული უძრავი ქონება</span>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-person-shelter"></i></div>
+                        <h4 class="lang-target" data-ge="Perimeter Watch" data-en="Perimeter Watch">Perimeter Watch</h4>
+                        <p class="lang-target" data-ge="ღობეების, კედლებისა და დაცული ზონების კონტროლი. დეტექტირებას უკეთებს მიწის გათხრას, გადაძრომას, ჭიშკრის გატეხვის მცდელობებს." data-en="Guards perimeter walls, fences, and gates. Detects physical wall scaling, structural digging, gate forcing attempts, or unauthorized vehicles lurking outside.">ღობეების, კედლებისა და დაცული ზონების კონტროლი.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-moon"></i></div>
+                        <h4 class="lang-target" data-ge="After-Hours Activity" data-en="After-Hours Activity">After-Hours Activity</h4>
+                        <p class="lang-target" data-ge="ობიექტების დაცვა ღამის საათებში და უქმე დღეებში. აფიქსირებს მცირედ მოძრაობას ან შუქის ჩართვას დაკეტილ ცარიელ შენობებში." data-en="Secures empty lock-up buildings overnight or over holiday shutdowns. Flags subtle room shadows, moving light sources, or localized door opening events.">ობიექტების დაცვა ღამის საათებში და უქმე დღეებში.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-id-card-clip"></i></div>
+                        <h4 class="lang-target" data-ge="Visitor Management" data-en="Visitor Management">Visitor Management</h4>
+                        <p class="lang-target" data-ge="სტუმრების სიების ავტომატური ვერიფიკაცია ავტომობილის ნომრებისა და სახის ბიომეტრიის მიხედვით საკონტროლო-გამშვებ პუნქტებზე." data-en="Automates gate entry credentials via high-speed license plate scanning and structural facial biometrics cross-referenced with your daily guest list.">სტუმრების სიების ავტომატური ვერიფიკაცია ავტომობილის ნომრების მიხედვით.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-user-clock"></i></div>
+                        <h4 class="lang-target" data-ge="Loitering Detector" data-en="Loitering Detector">Loitering Detector</h4>
+                        <p class="lang-target" data-ge="იმ პირების გამოვლენა, რომლებიც დიდხანს იმყოფებიან შესასვლელებთან ან ღობეებთან აშკარა მიზნის გარეშე, რაც მიანიშნებს საფრთხეზე." data-en="Identifies individuals staying inside high-security thresholds, blindspots, or entry paths for excessive intervals without clear commercial intent.">იმ პირების გამოვლენა, რომლებიც დიდხანს იმყოფებიან შესასვლელებთან.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-burst"></i></div>
+                        <h4 class="lang-target" data-ge="Weapons Detector" data-en="Weapons Detector">Weapons Detector</h4>
+                        <p class="lang-target" data-ge="ცეცხლსასროლი, ცივი იარაღის ან ფეთქებადი ნივთიერებების აღმოჩენა ადამიანების ხელში ღია მოედნებზე ან პარკინგებზე." data-en="Neural network object recognition tracking open-air corporate courtyards or parkways to spot drawn rifles, sidearms, or weapon shapes in crowds.">ცეცხლსასროლი, ცივი იარაღის აღმოჩენა ადამიანების ხელში.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-fire"></i></div>
+                        <h4 class="lang-target" data-ge="Wildfire Watcher" data-en="Wildfire Watcher">Wildfire Watcher</h4>
+                        <p class="lang-target" data-ge="გარე AI კამერები სკანირებენ ჰორიზონტს კვამლის, ალმოდებული ადგილების, მფრინავი ნაპერწკლების ან სმოგის გამოსავლენად, ხანძრების პრევენციისთვის." data-en="Long-range structural camera feeds scan the open skyline to evaluate micro-smoke clouds, early fire glow, flying ember arcs, or localized smog clouds.">გარე AI კამერები სკანირებენ ჰორიზონტს კვამლის გამოსავლენად.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-shield-car"></i></div>
+                        <h4 class="lang-target" data-ge="Vehicle Monitor" data-en="Vehicle Monitor">Vehicle Monitor</h4>
+                        <p class="lang-target" data-ge="ავტომობილების 24-საათიანი დაცვა ღია პარკინგებზე ვანდალიზმისგან, სარკეების, საბურავების მოპარვისგან ან გატაცების მცდელობისგან." data-en="24/7 parking lot vision security targeting theft patterns around client vehicles: window smashing, mirror stripping, catalytic converter extraction, or tow attempts.">ავტომობილების 24-საათიანი დაცვა ღია პარკინგებზე ვანდალიზმისგან.</p>
+                    </div>
+                    <div class="module-card" data-tags="safety">
+                        <div class="module-image-wrapper"><i class="fa-solid fa-torii-gate"></i></div>
+                        <h4 class="lang-target" data-ge="Automated Barrier" data-en="Automated Barrier">Automated Barrier</h4>
+                        <p class="lang-target" data-ge="შლაგბაუმებისა და ბოლარდების მართვა სახელმწიფო ნომრების თეთრ სიასთან შედარების საფუძველზე, დისპეტჩერის მონაწილეობის გარეშე." data-en="Operates pneumatic security bollards and perimeter gates autonomously via neural white-list vehicle registries, bypassing dispatcher delays.">შლაგბაუმებისა და ბოლარდების ავტომატური მართვა.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing-calculator" class="calculator-box reveal-element">
+            <h3 class="lang-target" data-ge="<i class='fa-solid fa-calculator'></i> გამოთვალეთ ღირებულება" data-en="<i class='fa-solid fa-calculator'></i> Dynamic Pricing Calculator"><i class="fa-solid fa-calculator"></i> გამოთვალეთ ღირებულება</h3>
+            
+            <p style="font-size: 0.85rem; color: var(--primary-cyan); margin-bottom: 20px; border-left: 2px solid var(--primary-cyan); padding-left: 10px;" class="lang-target"
+               data-ge="⚠ გაანგარიშების პრინციპი: 1 კამერა = 1 ლიცენზია/მოდული. თუ ერთ კამერაზე გჭირდებათ რამდენიმე ფუნქცია (მაგ. 3 მოდული 10 კამერაზე), აირჩიეთ მოდულების შესაბამისი რაოდენობა."
+               data-en="⚠ Licensing Principle: 1 Camera = 1 License/Module. If you require multiple analytics models on a single node (e.g., 3 modules across 10 cameras), select the active count below.">
+               ⚠ გაანგარიშების პრინციპი: 1 კამერა = 1 ლიცენზია/მოდული. თუ ერთ კამერაზე გჭირდებათ რამდენიმე ფუნქცია (მაგ. 3 მოდული 10 კამერაზე), აირჩიეთ მოდულების შესაბამისი რაოდენობა.
+            </p>
+
+            <div class="calc-grid">
+                <div>
+                    <label class="lang-target" data-ge="კამერების რაოდენობა:" data-en="Number of Active Cameras:">კამერების რაოდენობა:</label> <strong id="camera-count-view">10</strong>
+                    <div class="range-slider-wrapper">
+                        <input type="range" id="cameraRange" class="range-slider" min="1" max="100" value="10" oninput="calculatePrice()">
+                    </div>
+
+                    <div class="multiplier-box">
+                        <label class="lang-target" data-ge="AI მოდულების რაოდენობა თითო კამერაზე:" data-en="AI Modules Activated Per Camera:">AI მოდულების რაოდენობა თითო კამერაზე:</label>
+                        <div class="multiplier-selector">
+                            <button class="mult-btn active" onclick="setMultiplier(1, this)">1</button>
+                            <button class="mult-btn" onclick="setMultiplier(2, this)">2</button>
+                            <button class="mult-btn" onclick="setMultiplier(3, this)">3</button>
+                            <button class="mult-btn" onclick="setMultiplier(4, this)">4</button>
+                        </div>
+                    </div>
+                    
+                    <label style="display:block; margin-top: 25px;" class="lang-target" data-ge="აირჩიეთ ტარიფი:" data-en="Select Analytics Tier:">აირჩიეთ ტარიფი:</label>
+                    <div class="plan-select">
+                        <div class="plan-option active" id="tierStandard" onclick="selectTier('standard')">
+                            <i class="fa-solid fa-circle-question info-icon"></i>
+                            <div class="tooltip-text">
+                                <strong>Standard Node:</strong><br>Basic AI Analytics (People counting, tripwire, motion triggers). Optimized server load.
+                            </div>
+                            <h5>Standard ($10)</h5>
+                            <span style="font-size: 0.8rem;" class="lang-target" data-ge="სტანდარტული ანალიტიკა" data-en="Basic AI Analytics">სტანდარტული ანალიტიკა</span>
+                        </div>
+                        <div class="plan-option" id="tierPremium" onclick="selectTier('premium')">
+                            <i class="fa-solid fa-circle-question info-icon"></i>
+                            <div class="tooltip-text">
+                                <strong>Premium Node:</strong><br>Heavy Deep Learning (Facial recognition, weapon detection, posture & stress tracking). High-compute GPU clusters.
+                            </div>
+                            <h5>Premium AI ($50)</h5>
+                            <span style="font-size: 0.8rem; color: var(--primary-cyan);" class="lang-target" data-ge="მძიმე ნეიროქსელები" data-en="Advanced Deep Learning">მძიმე ნეიროქსელები</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="price-display-wrapper">
+                    <span class="lang-target" data-ge="ყოველთვიური საფასური" data-en="Estimated Monthly Plan">ყოველთვიური საფასური</span>
+                    <div class="final-price">$<span id="calculatedPriceDisplay">100</span></div>
+                    <button class="cta-btn activate-btn lang-target" data-ge="აქტივაცია" data-en="Activate Now" onclick="openDemoModal()">აქტივაცია</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-showcase-box reveal-element">
+            <div class="demo-badge-price">B2B LIVE TRIAL • $100</div>
+            <h3 class="lang-target" data-ge="სადემონსტრაციო ტესტ-დრაივი თქვენს ობიექტზე" data-en="Paid Hardware Demonstration On-Site">სადემონსტრაციო ტესტ-დრაივი თქვენს ობიექტზე</h3>
+            <p style="margin: 15px 0 25px; color: var(--text-muted);" class="lang-target"
+               data-ge="ჩვენი ინჟინრები მოვლენ თქვენს ობიექტზე (ბათუმსა ან თბილისში), დროებით დაამონტაჟებენ Vision Bionic AI აღჭურვილობას და რეალურ დროში გიჩვენებენ, თუ როგორ მუშაობს თქვენი არჩეული ნეიროქსელები. ღირებულება შეადგენს $100-ს, რომელიც სრულად ანაზღაურდება შემდგომი კონტრაქტის გაფორმებისას."
+               data-en="Our engineers will visit your enterprise location (Batumi / Tbilisi), temporarily configure high-compute Vision Bionic hardware loops, and demonstrate chosen neural networks live over your existing cameras. The service costs $100, which is fully credited back to your account upon active service activation.">
+               ჩვენი ინჟინრები მოვლენ თქვენს ობიექტზე (ბათუმსა ან თბილისში), დროებით დაამონტაჟებენ Vision Bionic AI აღჭურვილობას და რეალურ დროში გიჩვენებენ, თუ როგორ მუშაობს თქვენი არჩეული ნეიროქსელები. ღირებულება შეადგენს $100-ს, რომელიც სრულად ანაზღაურდება შემდგომი კონტრაქტის გაფორმებისას.
+            </p>
+            <button class="cta-btn demo-site-btn lang-target" data-ge="ტესტ-დრაივის შეკვეთა" data-en="Order On-Site Demonstration" onclick="openDemoModal('paid')">ტესტ-დრაივის შეკვეთა</button>
+        </section>
+
+        <section class="case-study-box reveal-element">
+            <h3 class="lang-target" data-ge="<i class='fa-solid fa-chart-line'></i> ეფექტურობის რეალური ქეისი" data-en="<i class='fa-solid fa-chart-line'></i> Operational Case Study"><i class="fa-solid fa-chart-line"></i> ეფექტურობის რეალური ქეისი</h3>
+            <p class="lang-target" data-ge="VisionGuard-ის დანერგვის შედეგები პარტნიორი რესტორნების ქსელში (3 ფილიალი, 45 კამერა):" data-en="Aggregated integration statistics inside a regional restaurant cluster (3 locations, 45 camera nodes):">VisionGuard-ის დანერგვის შედეგებიamp პარტნიორი რესტორნების ქსელში:</p>
+            <div class="case-grid">
+                <div class="case-metric">
+                    <h4 style="color:#10b981">-7 წუთი</h4>
+                    <p style="font-size:0.85rem;" class="lang-target" data-ge="მაგიდის მომსახურების ლოდინის დროის შემცირება Table Tracker-ის მეშვეობით." data-en="Reduction in average table service delays via active Table Tracker loops.">მაგიდის მომსახურების ლოდინის დროის შემცირება</p>
+                </div>
+                <div class="case-metric">
+                    <h4 style="color:#10b981">+24%</h4>
+                    <p style="font-size:0.85rem;" class="lang-target" data-ge="საშუალო ჩეკის ზრდა Diner Demographics-ის მიზნობრივი მარკეტინგის წყალობით." data-en="Increase in average checkout ticket from targeted menu item sorting.">საშუალო ჩეკის ზრდა მარკეტინგის წყალობით.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="astra" style="margin-top: 80px;">
+            <h2 class="section-title reveal-element"><span class="lang-target" data-ge="მართვის ღრუბლოვანი პლატფორმა" data-en="Cloud Management Platform">მართვის ღრუბლოვანი პლატფორმა</span> <span>Astra CRM/ERP</span></h2>
+            <div class="store-intro reveal-element">
+                <p class="lang-target" 
+                   data-ge="<strong>Black Sea Technologies Astra</strong> — ეს არის ბიზნეს-პროცესების მართვის ინტეგრირებული ღრუბლოვანი ეკოსისტემა მცირე და საშუალო ბიზნესისთვის. პლატფორმა უზრუნველყოფს ბიზნესის მართვის მაქსიმალურ სიჩქარეს ყოველგვარი შეზღუდვების გარეშე." 
+                   data-en="<strong>Black Sea Technologies Astra</strong> is an integrated cloud business process administration ecosystem tailored for scaling businesses. The platform provides extreme process speed with zero overhead or architecture barriers inside an intuitive dashboard.">
+                   <strong>Black Sea Technologies Astra</strong> — ეს არის ბიზნეს-პროცესების მართვის ინტეგრირებული ღრუბლოვანი ეკოსისტემა მცირე და საშუალო ბიზნესისთვის.
+                </p>
+                
+                <h4 style="margin-top: 30px; color: var(--primary-cyan); font-size: 1.2rem;" class="lang-target" data-ge="<i class='fa-solid fa-layer-group'></i> არქიტექტურის საკვანძო უპირატესობები:" data-en="<i class='fa-solid fa-layer-group'></i> Key Architectural Advantages:"><i class="fa-solid fa-layer-group"></i> არქიტექტურის საკვანძო უპირატესობები:</h4>
+                <div class="astra-features-grid">
+                    <div class="astra-feature-item"><i class="fa-solid fa-gauge-high"></i> <span class="lang-target" data-ge="მართვის ეფექტურობა" data-en="Administrative Performance">მართვის ეფექტურობა</span></div>
+                    <div class="astra-feature-item"><i class="fa-solid fa-circle-nodes"></i> <span class="lang-target" data-ge="უმტკივნეულო ინტეგრაცია email-თან" data-en="Native Email & Calendar Sync">უმტკივნეულო ინტეგრაცია email-თან</span></div>
+                    <div class="astra-feature-item"><i class="fa-solid fa-wand-magic-sparkles"></i> <span class="lang-target" data-ge="ინტუიციური ინტერფეისი" data-en="Zero-Learning User Interface">ინტუიციური ინტერფეისი</span></div>
+                    <div class="astra-feature-item"><i class="fa-solid fa-sliders"></i> <span class="lang-target" data-ge="პარამეტრების აბსოლუტური მოქნილობა" data-en="Absolute Parameter Modularity">პარამეტრების აბსოლუტური მოქნილობა</span></div>
+                </div>
+
+                <h4 style="margin-top: 35px; color: var(--primary-cyan); font-size: 1.2rem;" class="lang-target" data-ge="<i class='fa-solid fa-screwdriver-wrench'></i> Astra პლატფორმის ჩაშენებული ინსტრუმენტების სრული სპექტრი:" data-en="<i class='fa-solid fa-screwdriver-wrench'></i> Full Toolkit Spectrum Built Into Astra:"><i class="fa-solid fa-screwdriver-wrench"></i> Astra პლატფორმის ჩაშენებული ინსტრუმენტების სრული სპექტრი:</h4>
+                
+                <div class="astra-grid-tools">
+                    <div class="astra-tool-tag"><i class="fa-solid fa-address-book"></i> <span class="lang-target" data-ge="პერსპექტივები და კლიენტები" data-en="Leads & Customers">პერსპექტივები და კლიენტები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-headset"></i> <span class="lang-target" data-ge="სერვისული მხარდაჭერა" data-en="Helpdesk & Ticket Support">სერვისული მხარდაჭერა</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-list-check"></i> <span class="lang-target" data-ge="პროექტები და ამოცანები" data-en="Projects & Tasks">პროექტები და ამოცანები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-laptop-code"></i> <span class="lang-target" data-ge="ინტეგრირებული CMS" data-en="Integrated CMS System">ინტეგრირებული CMS</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-file-invoice-dollar"></i> <span class="lang-target" data-ge="კომერციული წინადადებები" data-en="Commercial Quotes">კომერციული წინადადებები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-cart-shopping"></i> <span class="lang-target" data-ge="გაყიდვების შეკვეთები" data-en="Sales Orders">გაყიდვების შეკვეთები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-file-contract"></i> <span class="lang-target" data-ge="კონტრაქტები და ხელშეკრულებები" data-en="Contracts & Legal Deeds">კონტრაქტები და ხელშეკრულებები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-cash-register"></i> <span class="lang-target" data-ge="POS ტერმინალები" data-en="POS Terminal Nodes">POS ტერმინალები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-receipt"></i> <span class="lang-target" data-ge="ინვოისები და გადახდები" data-en="Invoices & Gateways">ინვოისები და გადახდები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-calculator"></i> <span class="lang-target" data-ge="ბუღალტრული აღრიცხვა" data-en="General Ledger Accounting">ბუღალტრული აღრიცხვა</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-bolt"></i> <span class="lang-target" data-ge="ოპერატიული ჩარევები" data-en="Live Interventions">ოპერატიული ჩარევები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-calendar-days"></i> <span class="lang-target" data-ge="კალენდარი / დღის წესრიგი" data-en="Schedules & Agendas">კალენდარი / დღის წესრიგი</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-users"></i> <span class="lang-target" data-ge="თანამშრომელთა მართვა" data-en="HR & Workforce Tracking">თანამშრომელთა მართვა</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-money-bill-trend-up"></i> <span class="lang-target" data-ge="ხარჯების რეპორტები" data-en="Expense Accounts Reports">ხარჯების რეპორტები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-puzzle-piece"></i> <span class="lang-target" data-ge="აპლიკაციები და პლაგინები" data-en="App Marketplace Plugins">აპლიკაციები და პლაგინები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-warehouse"></i> <span class="lang-target" data-ge="სასაწყობო მარაგები" data-en="Warehouse Stock Balances">სასაწყობო მარაგები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-chart-line"></i> <span class="lang-target" data-ge="მიმოხილვები და ანალიტიკა" data-en="Business Intelligence Insights">მიმოხილვები და ანალიტიკა</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-clock"></i> <span class="lang-target" data-ge="სამუშაო დროის აღრიცხვა" data-en="Timesheet Auditing">სამუშაო დროის აღრიცხვა</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-truck-ramp-box"></i> <span class="lang-target" data-ge="შესყიდვები და მიწოდება" data-en="Procurement Pipelines">შესყიდვები და მიწოდება</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-code"></i> <span class="lang-target" data-ge="ღია API დეველოპერებისთვის" data-en="Open Developer API Core">ღია API დეველოპერებისთვის</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-user-plus"></i> <span class="lang-target" data-ge="რეკრუტინგი და კადრების შერჩევა" data-en="Recruitment Pipelines">რეკრუტინგი და კადრების შერჩევა</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-id-card"></i> <span class="lang-target" data-ge="წევრობა და გამომწერები" data-en="Memberships & Subscriptions">წევრობა და გამომწერები</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-cubes"></i> <span class="lang-target" data-ge="პროდუქტები და მომსახურება" data-en="Product & Services Indices">პროდუქტები და მომსახურება</span></div>
+                    <div class="astra-tool-tag"><i class="fa-solid fa-truck"></i> <span class="lang-target" data-ge="გაგზავნა და ლოგისტიკა" data-en="Freight Shipping Logistics">გაგზავნა და ლოგისტიკა</span></div>
+                </div>
+
+                <h4 style="margin-top: 40px; color: var(--primary-cyan); font-size: 1.2rem;" class="lang-target" data-ge="<i class='fa-solid fa-circle-nodes'></i> სინერგია AI ვიდეოანალიტიკასთან:" data-en="<i class='fa-solid fa-circle-nodes'></i> AI Vision Telemetry Synergy:"><i class="fa-solid fa-circle-nodes"></i> სინერგია AI ვიდეოანალიტიკასთან:</h4>
+                <div class="overlay-demo">
+                    <i class="fa-solid fa-terminal" style="margin-right: 8px;"></i> [VisionGuard HUD Live OSD Mode]<br>
+                    <span class="lang-target" data-ge="ვიზიტორი: ქალი, ~27 წლის | ბოლო ვიზიტი: 2 დღის წინ | საშუალო ჩეკი: $73" data-en="Visitor: Female, ~27 y/o | Last Visit: 2 days ago | Average Basket: $73">ვიზიტორი: ქალი, ~27 წლის | ბოლო ვიზიტი: 2 დღის წინ | საშუალო ჩეკი: $73</span><br>
+                    <span class="lang-target" data-ge="თანხლება: ბავშვი, 5 წლის | სტატისტიკა: ბავშვების თანდასწრება ზრდის საშუალო ჩეკს 24%-ით" data-en="Accompanied by: Child, 5 y/o | Metric: Child presence increases checkout basket by 24%">თანხლება: ბავშვი, 5 წლის | სტატისტიკა: ბავშვების თანდასწრება ზრდის საშუალო ჩეკს 24%-ით</span><br>
+                    <span class="lang-target" data-ge="კვანძის სტატუსი: სამუშაო დროის ოპტიმიზაცია | რიგების კონტროლი | სალაროზე ფროდისგან დაცვა აქტიურია" data-en="Node Status: Shift Rosters Optimized | Checkout Line Track Active | Point-Of-Sale Fraud Protection Active">კვანძის სტატუსი: სამუშაო დროის ოპტიმიზაცია | რიგების კონტროლი | სალაროზე ფროდისგან დაცვა აქტიურია</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="modal-overlay" id="demoModal">
+        <div class="modal-window">
+            <button class="close-modal" onclick="closeDemoModal()">&times;</button>
+            <h3 style="color: var(--primary-cyan); margin-bottom: 20px;" class="lang-target" id="modalTitle" data-ge="მოითხოვეთ პერსონალური დემო" data-en="Request Private B2B Demo">მოითხოვეთ პერსონალური დემო</h3>
+            <form id="b2bForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label class="lang-target" data-ge="სადემონსტრაციო ტიპი" data-en="Demonstration Target">სადემონსტრაციო ტიპი</label>
+                    <select class="form-control" id="formRequestType" style="background:#020617; color:#fff;">
+                        <option value="free" class="lang-target" data-ge="ონლაინ პრეზენტაცია (უფასო)" data-en="Online Remote Screen-Share (Free)">ონლაინ პრეზენტაცია (უფასო)</option>
+                        <option value="paid" class="lang-target" data-ge="ტესტ-დრაივი ობიექტზე ($100)" data-en="On-Site Hardware Trial ($100)">ტესტ-დრაივი ობიექტზე ($100)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="lang-target" data-ge="თქვენი სახელი" data-en="Your Full Name">თქვენი სახელი</label>
+                    <input type="text" class="form-control" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="lang-target" data-ge="კომპანიის დასახელება" data-en="Company Name">კომპანიის დასახელება</label>
+                    <input type="text" class="form-control" required placeholder="Enterprise LLC">
+                </div>
+                <div class="form-group">
+                    <label class="lang-target" data-ge="საკონტაქტო ელ-ფოსტა" data-en="Business Email">საკონტაქტო ელ-ფოსტა</label>
+                    <input type="email" class="form-control" required placeholder="corp@domain.com">
+                </div>
+                <button type="submit" class="cta-btn style-btn" style="width: 100%" class="lang-target" data-ge="გაგზავნა" data-en="Submit Application">გაგზავნა</button>
+            </form>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <p>© 2026 Black Sea Technologies. ყველა უფლება დაცულია. შემუშავებულია VisionGuard & Astra Platform ბრენდის ქვეშ.</p>
+        <p>Web: <a href="http://bstech.ge" target="_blank">bstech.ge</a></p>
+    </footer>
+
+    <script>
+        /* 1. НЕЙРО-ФОН НА CANVAS */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+        let mouse = { x: null, y: null, radius: 160 };
+
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            initCanvas();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor(x, y, dx, dy, size, color) {
+                this.x = x; this.y = y; this.dx = dx; this.dy = dy; this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color; ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.dx = -this.dx;
+                if (this.y > canvas.height || this.y < 0) this.dy = -this.dy;
+                let distX = mouse.x - this.x; let distY = mouse.y - this.y;
+                let distance = Math.sqrt(distX*distX + distY*distY);
+                if (distance < mouse.radius + this.size) {
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 2;
+                    if (mouse.x > this.x && this.x > this.size * 10) this.x -= 2;
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 2;
+                    if (mouse.y > this.y && this.y > this.size * 10) this.y -= 2;
+                }
+                this.x += this.dx; this.y += this.dy; this.draw();
+            }
+        }
+
+        function initCanvas() {
+            particlesArray = [];
+            let quantity = (canvas.height * canvas.width) / 15000;
+            quantity = Math.min(quantity, 75);
+            for (let i = 0; i < quantity; i++) {
+                let size = (Math.random() * 1.5) + 0.5;
+                let x = Math.random() * innerWidth; let y = Math.random() * innerHeight;
+                let dx = (Math.random() * 0.4) - 0.2; let dy = (Math.random() * 0.4) - 0.2;
+                particlesArray.push(new Particle(x, y, dx, dy, size, 'rgba(0, 240, 255, 0.22)'));
+            }
+        }
+
+        function connectParticles() {
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dist = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (dist < (canvas.width/7) * (canvas.height/7)) {
+                        let op = 1 - (dist/20000);
+                        ctx.strokeStyle = 'rgba(59, 130, 246,' + op * 0.06 + ')';
+                        ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) particlesArray[i].update();
+            connectParticles(); requestAnimationFrame(animateCanvas);
+        }
+
+        /* 2. ИНТЕЛЛЕКТУАЛЬНЫЙ АВТОНОМНЫЙ ПЛЕЕР + СИМУЛЯТОРЫ ИНТЕРФЕЙСА */
+        const liveVideoUrl = ""; 
+        const screenshotUrls = { bi: "", crm: "" };
+
+        function switchShowcaseTab(tabKey, buttonElement) {
+            document.querySelectorAll('.showcase-tab-btn').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+            
+            const viewport = document.getElementById('showcaseViewport');
+            viewport.innerHTML = ''; 
+
+            if (tabKey === 'live') {
+                if (liveVideoUrl !== "") {
+                    viewport.innerHTML = `<iframe src="${liveVideoUrl}?autoplay=1&mute=1" style="width:100%; height:100%; border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else {
+                    viewport.innerHTML = `
+                        <div class="camera-grid-mockup">
+                            <div class="camera-stream"><div class="cam-header"><div class="cam-rec-dot"></div>CAM 01 • MAIN ENTRY</div><div class="ai-target-box"><div class="ai-tag-label">HUMAN: 98%</div></div></div>
+                            <div class="camera-stream"><div class="cam-header"><div class="cam-rec-dot"></div>CAM 02 • CHECKOUT ZONE</div></div>
+                            <div class="camera-stream"><div class="cam-header"><div class="cam-rec-dot"></div>CAM 03 • PARKING LOT</div></div>
+                            <div class="camera-stream"><div class="cam-header"><div class="cam-rec-dot"></div>CAM 04 • BACKSTAGE LOCKER</div></div>
+                        </div>`;
+                }
+                return;
+            }
+
+            if (screenshotUrls[tabKey] && screenshotUrls[tabKey] !== "") {
+                viewport.style.backgroundImage = screenshotUrls[tabKey];
+                return;
+            }
+
+            if (tabKey === 'bi') {
+                viewport.innerHTML = `
+                    <div class="analytics-mockup">
+                        <h5 style="color:var(--primary-cyan); font-family:monospace;">[VisionGuard Analytics Suite]</h5>
+                        <div class="mock-chart-row">
+                            <div class="mock-chart-card">
+                                <span style="font-size:0.75rem; color:var(--text-muted);">Conversion Rates (Hourly)</span>
+                                <div class="mock-bar-container">
+                                    <div class="mock-bar" style="height:40%"></div><div class="mock-bar" style="height:75%"></div>
+                                    <div class="mock-bar" style="height:90%"></div><div class="mock-bar" style="height:60%"></div>
+                                </div>
+                            </div>
+                            <div class="mock-chart-card">
+                                <span style="font-size:0.75rem; color:var(--text-muted);">Neural Object Accuracy</span>
+                                <div class="mock-line-node">99.82%</div>
+                                <span style="font-size:0.65rem; color:#10b981;"><i class="fa-solid fa-arrow-trend-up"></i> +0.4% optimal</span>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (tabKey === 'crm') {
+                viewport.innerHTML = `
+                    <div class="erp-mockup">
+                        <div class="erp-top-stats">
+                            <div class="erp-stat-node"><small style="color:var(--text-muted); font-size:0.7rem;">Active Billing</small><div style="color:var(--primary-cyan); font-weight:bold;">$14,250</div></div>
+                            <div class="erp-stat-node"><small style="color:var(--text-muted); font-size:0.7rem;">NVR Nodes</small><div style="color:#fff; font-weight:bold;">12 Online</div></div>
+                            <div class="erp-stat-node"><small style="color:var(--text-muted); font-size:0.7rem;">Open Tickets</small><div style="color:#ef4444; font-weight:bold;">0 New</div></div>
+                            <div class="erp-stat-node"><small style="color:var(--text-muted); font-size:0.7rem;">SaaS Plan</small><div style="color:#10b981; font-weight:bold;">Enterprise</div></div>
+                        </div>
+                        <div class="erp-table-mock">
+                            <div class="erp-row-mock"><span>#1042 - Batumi Cafe Loop</span><span>Table Tracker Active</span><span class="erp-status-badge">OK</span></div>
+                            <div class="erp-row-mock"><span>#1043 - Tbilisi Office Gate</span><span>Face Recognition SDK</span><span class="erp-status-badge">OK</span></div>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        /* 3. ПОИСК И ЖИВАЯ ФИЛЬТРАЦИЯ */
+        let currentFilter = 'all';
+        function filterTagClick(element) {
+            document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+            element.classList.add('active');
+            currentFilter = element.getAttribute('data-filter');
+            filterModules();
+        }
+
+        function filterModules() {
+            const query = document.getElementById('moduleSearch').value.toLowerCase();
+            const blocks = document.querySelectorAll('.industry-block');
+            blocks.forEach(block => {
+                const cards = block.querySelectorAll('.module-card');
+                let visibleCardsInBlock = 0;
+                cards.forEach(card => {
+                    const title = card.querySelector('h4').innerText.toLowerCase();
+                    const desc = card.querySelector('p').innerText.toLowerCase();
+                    const cardTags = card.getAttribute('data-tags').split(' ');
+                    const matchesSearch = title.includes(query) || desc.includes(query);
+                    const matchesFilter = (currentFilter === 'all') || cardTags.includes(currentFilter);
+                    if (matchesSearch && matchesFilter) {
+                        card.style.display = 'flex'; visibleCardsInBlock++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                block.style.display = (visibleCardsInBlock > 0) ? 'block' : 'none';
+            });
+        }
+
+        /* 4. B2B КАЛЬКУЛЯТОР МУЛЬТИПЛИКАТОРА ($10 / $50) */
+        let activeTier = 'standard';
+        let currentMultiplier = 1;
+
+        function setMultiplier(val, btn) {
+            document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentMultiplier = val;
+            calculatePrice();
+        }
+
+        function selectTier(tier) {
+            document.getElementById('tierStandard').classList.remove('active');
+            document.getElementById('tierPremium').classList.remove('active');
+            if(tier === 'standard') document.getElementById('tierStandard').classList.add('active');
+            else document.getElementById('tierPremium').classList.add('active');
+            activeTier = tier; calculatePrice();
+        }
+
+        function calculatePrice() {
+            const cameras = document.getElementById('cameraRange').value;
+            document.getElementById('camera-count-view').innerText = cameras;
+            const basePricePerCamera = (activeTier === 'standard') ? 10 : 50;
+            let totalPrice = cameras * currentMultiplier * basePricePerCamera;
+            const totalLicensesCount = cameras * currentMultiplier;
+            if (totalLicensesCount > 30) totalPrice *= 0.85; 
+            else if (totalLicensesCount > 10) totalPrice *= 0.95;
+            document.getElementById('calculatedPriceDisplay').innerText = Math.round(totalPrice);
+        }
+
+        /* 5. МУЛЬТИЯЗЫЧНОСТЬ */
+        function switchLanguage(lang, button) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+            document.querySelectorAll('.lang-target').forEach(el => {
+                const translation = el.getAttribute(`data-${lang}`);
+                if (translation) el.innerHTML = translation;
+            });
+        }
+
+        /* 6. УПРАВЛЕНИЕ UI И ОКНАМИ Заявки */
+        function openDemoModal(type = 'free') { 
+            const overlay = document.getElementById('demoModal');
+            const selectNode = document.getElementById('formRequestType');
+            if(type === 'paid') selectNode.value = 'paid';
+            else selectNode.value = 'free';
+            overlay.classList.add('active'); 
+        }
+        function closeDemoModal() { document.getElementById('demoModal').classList.remove('active'); }
+        function handleFormSubmit(e) {
+            e.preventDefault(); 
+            alert("განაცხადი გაგზავნილია! ჩვენი ინჟინრები დაგიკავშირდებიან. / Application submitted successfully! Our deployment engineers will contact you shortly.");
+            closeDemoModal(); document.getElementById('b2bForm').reset();
+        }
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + '%';
+        });
+
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); });
+            }, { threshold: 0.05 });
+            document.querySelectorAll('.reveal-element').forEach(el => observer.observe(el));
+        }
+
+        resizeCanvas(); animateCanvas(); calculatePrice(); initScrollReveal();
+        switchShowcaseTab('live', document.querySelector('.showcase-tab-btn')); 
+    </script>
+</body>
+</html>
+
